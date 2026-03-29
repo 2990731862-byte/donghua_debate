@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "辩手积分榜",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "rank-card": "../../components/rank-card/rank-card"
+  }
+}

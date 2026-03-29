@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "score-breakdown": "../score-breakdown/score-breakdown"
+  }
+}

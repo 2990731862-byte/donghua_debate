@@ -1,0 +1,219 @@
+<view class="container">
+  <!-- 步骤指示器 -->
+  <view class="steps-bar">
+    <view class="step {{step >= 1 ? 'active' : ''}}">
+      <view class="step-dot">1</view>
+      <text class="step-label">比赛信息</text>
+    </view>
+    <view class="step-line {{step >= 2 ? 'active' : ''}}"></view>
+    <view class="step {{step >= 2 ? 'active' : ''}}">
+      <view class="step-dot">2</view>
+      <text class="step-label">选参赛者</text>
+    </view>
+    <view class="step-line {{step >= 3 ? 'active' : ''}}"></view>
+    <view class="step {{step >= 3 ? 'active' : ''}}">
+      <view class="step-dot">3</view>
+      <text class="step-label">详细信息</text>
+    </view>
+    <view class="step-line {{step >= 4 ? 'active' : ''}}"></view>
+    <view class="step {{step >= 4 ? 'active' : ''}}">
+      <view class="step-dot">4</view>
+      <text class="step-label">确认提交</text>
+    </view>
+  </view>
+
+  <!-- 步骤1：比赛基本信息 -->
+  <view class="step-content card" wx:if="{{step === 1}}">
+    <text class="step-title">比赛基本信息</text>
+
+    <view class="form-group">
+      <text class="form-label">比赛名称</text>
+      <input class="form-input" placeholder="如：第十届新生杯" value="{{matchName}}" bindinput="onMatchNameInput" />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">赛事级别</text>
+      <view class="level-picker">
+        <view
+          class="level-option {{matchLevel === '院赛' ? 'active' : ''}}"
+          bindtap="onLevelChange"
+          data-level="院赛"
+        >
+          <text>院赛 (W=1)</text>
+        </view>
+        <view
+          class="level-option {{matchLevel === '校赛' ? 'active' : ''}}"
+          bindtap="onLevelChange"
+          data-level="校赛"
+        >
+          <text>校赛 (W=2)</text>
+        </view>
+        <view
+          class="level-option {{matchLevel === '市赛' ? 'active' : ''}}"
+          bindtap="onLevelChange"
+          data-level="市赛"
+        >
+          <text>市赛 (W=4)</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">比赛日期</text>
+      <picker mode="date" value="{{matchDate}}" bindchange="onDateChange">
+        <view class="form-input picker-input">
+          <text>{{matchDate || '请选择日期'}}</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">总轮次数</text>
+      <view class="round-picker">
+        <view
+          class="round-option {{matchTotalRounds === item ? 'active' : ''}}"
+          wx:for="{{[1,2,3,4,5]}}"
+          wx:key="*this"
+          bindtap="onTotalRoundsChange"
+          data-rounds="{{item}}"
+        >
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="step-buttons">
+      <view class="btn-primary" bindtap="nextStep">下一步</view>
+    </view>
+  </view>
+
+  <!-- 步骤2：选择参赛者 -->
+  <view class="step-content card" wx:if="{{step === 2}}">
+    <text class="step-title">选择参赛辩手</text>
+    <text class="step-hint">点击选择参加本场比赛的辩手</text>
+
+    <view class="debater-select-list">
+      <view
+        class="debater-select-item {{item.selected ? 'selected' : ''}}"
+        wx:for="{{allDebaters}}"
+        wx:key="_id"
+        bindtap="toggleDebater"
+        data-index="{{index}}"
+      >
+        <view class="select-check">{{item.selected ? '✓' : ''}}</view>
+        <text class="select-name">{{item.name}}</text>
+        <text class="select-college">{{item.college}}</text>
+      </view>
+    </view>
+
+    <view class="selected-count">已选 {{selectedCount}} 人</view>
+
+    <view class="step-buttons">
+      <view class="btn-secondary" bindtap="prevStep">上一步</view>
+      <view class="btn-primary" bindtap="nextStep">下一步</view>
+    </view>
+  </view>
+
+  <!-- 步骤3：每位参赛者的详细信息 -->
+  <view class="step-content" wx:if="{{step === 3}}">
+    <text class="step-title" style="margin-bottom: 16rpx;">参赛者详情</text>
+
+    <view class="participant-card card" wx:for="{{participants}}" wx:key="debaterId">
+      <text class="participant-name">{{item.debaterName}}</text>
+
+      <view class="form-group">
+        <text class="form-label">参加的轮次（点击选择）</text>
+        <view class="round-picker">
+          <view
+            class="round-option {{item.roundsParticipated.indexOf(r) !== -1 ? 'active' : ''}}"
+            wx:for="{{roundOptions}}"
+            wx:for-item="r"
+            wx:for-index="rIdx"
+            wx:key="*this"
+            bindtap="toggleRound"
+            data-pindex="{{index}}"
+            data-round="{{r}}"
+          >
+            <text>第{{r}}轮</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">最佳辩手轮次（若有）</text>
+        <view class="round-picker">
+          <view
+            class="round-option best {{item.bestDebaterRounds.indexOf(r) !== -1 ? 'active' : ''}}"
+            wx:for="{{item.roundsParticipated}}"
+            wx:for-item="r"
+            wx:for-index="rIdx"
+            wx:key="*this"
+            bindtap="toggleBestDebater"
+            data-pindex="{{index}}"
+            data-round="{{r}}"
+          >
+            <text>第{{r}}轮</text>
+          </view>
+          <text class="hint-text" wx:if="{{item.roundsParticipated.length === 0}}">请先选择参加轮次</text>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <view class="checkbox-row" bindtap="toggleTopThree" data-pindex="{{index}}">
+          <view class="checkbox {{item.topThreeFinish ? 'checked' : ''}}">
+            <text wx:if="{{item.topThreeFinish}}">✓</text>
+          </view>
+          <text class="checkbox-label">获得前三名（冠亚季军）</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="step-buttons">
+      <view class="btn-secondary" bindtap="prevStep">上一步</view>
+      <view class="btn-primary" bindtap="nextStep">下一步</view>
+    </view>
+  </view>
+
+  <!-- 步骤4：确认提交 -->
+  <view class="step-content card" wx:if="{{step === 4}}">
+    <text class="step-title">确认比赛信息</text>
+
+    <view class="confirm-section">
+      <view class="confirm-row">
+        <text class="confirm-label">比赛名称</text>
+        <text class="confirm-value">{{matchName}}</text>
+      </view>
+      <view class="confirm-row">
+        <text class="confirm-label">赛事级别</text>
+        <text class="confirm-value">{{matchLevel}} (W={{matchWeight}})</text>
+      </view>
+      <view class="confirm-row">
+        <text class="confirm-label">比赛日期</text>
+        <text class="confirm-value">{{matchDate}}</text>
+      </view>
+      <view class="confirm-row">
+        <text class="confirm-label">总轮次</text>
+        <text class="confirm-value">{{matchTotalRounds}}轮</text>
+      </view>
+      <view class="confirm-row">
+        <text class="confirm-label">参赛人数</text>
+        <text class="confirm-value">{{participants.length}}人</text>
+      </view>
+    </view>
+
+    <view class="confirm-participants">
+      <text class="form-label">参赛者详情</text>
+      <view class="confirm-participant" wx:for="{{participants}}" wx:key="debaterId">
+        <text class="cp-name">{{item.debaterName}}</text>
+        <text class="cp-detail">轮次: {{item.roundsParticipated.join(', ')}}</text>
+        <text class="cp-detail" wx:if="{{item.bestDebaterRounds.length > 0}}">佳辩: 第{{item.bestDebaterRounds.join(', ')}}轮</text>
+        <text class="cp-detail cp-top3" wx:if="{{item.topThreeFinish}}">🏆 前三名</text>
+      </view>
+    </view>
+
+    <view class="step-buttons">
+      <view class="btn-secondary" bindtap="prevStep">上一步</view>
+      <view class="btn-primary submit-btn" bindtap="submitMatch">确认提交</view>
+    </view>
+  </view>
+</view>

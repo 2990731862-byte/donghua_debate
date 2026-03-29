@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "辩手详情",
+  "usingComponents": {
+    "match-card": "../../components/match-card/match-card"
+  }
+}

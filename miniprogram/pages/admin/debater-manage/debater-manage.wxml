@@ -1,0 +1,57 @@
+<view class="container">
+  <!-- 添加按钮 -->
+  <view class="add-btn btn-primary" bindtap="showAddForm">
+    + 添加辩手
+  </view>
+
+  <!-- 辩手列表 -->
+  <view class="debater-list">
+    <view class="debater-item card stagger-item" wx:for="{{debaters}}" wx:key="_id" style="animation-delay: {{index * 0.05}}s">
+      <view class="debater-info">
+        <text class="debater-name">{{item.name}}</text>
+        <text class="debater-meta">{{item.college}} · {{item.grade}}级 · {{item.totalScore}}分</text>
+      </view>
+      <view class="debater-actions">
+        <view class="action-btn edit-btn" bindtap="showEditForm" data-index="{{index}}">
+          <text>编辑</text>
+        </view>
+        <view class="action-btn delete-btn" bindtap="deleteDebater" data-id="{{item._id}}" data-name="{{item.name}}">
+          <text>删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && debaters.length === 0}}">
+    <text class="empty-icon">👥</text>
+    <text class="empty-text">暂无辩手，点击上方添加</text>
+  </view>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="modal-mask" wx:if="{{showForm}}" bindtap="hideForm">
+    <view class="modal-content card" catchtap="">
+      <text class="modal-title">{{editingId ? '编辑辩手' : '添加辩手'}}</text>
+
+      <view class="form-group">
+        <text class="form-label">姓名</text>
+        <input class="form-input" placeholder="请输入姓名" value="{{formName}}" bindinput="onNameInput" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">学院</text>
+        <input class="form-input" placeholder="请输入学院" value="{{formCollege}}" bindinput="onCollegeInput" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">年级</text>
+        <input class="form-input" placeholder="如：2024" value="{{formGrade}}" bindinput="onGradeInput" type="number" />
+      </view>
+
+      <view class="form-buttons">
+        <view class="btn-secondary" bindtap="hideForm">取消</view>
+        <view class="btn-primary" bindtap="submitForm">{{editingId ? '保存' : '添加'}}</view>
+      </view>
+    </view>
+  </view>
+</view>

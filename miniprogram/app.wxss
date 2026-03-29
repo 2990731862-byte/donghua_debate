@@ -1,0 +1,154 @@
+/* 全局样式 - 简约风格 */
+
+page {
+  background-color: #F6F6F6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 1.6;
+}
+
+/* 主题色变量 */
+.container {
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+/* 卡片基础样式 */
+.card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 标题样式 */
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+  margin-bottom: 20rpx;
+}
+
+/* 主色调 */
+.text-primary {
+  color: #1A1A2E;
+}
+
+/* 强调色 */
+.text-accent {
+  color: #E94560;
+}
+
+/* 辅助文字 */
+.text-secondary {
+  color: #999999;
+  font-size: 24rpx;
+}
+
+/* 金银铜牌颜色 */
+.rank-gold {
+  color: #FFD700;
+}
+
+.rank-silver {
+  color: #C0C0C0;
+}
+
+.rank-bronze {
+  color: #CD7F32;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background: #1A1A2E;
+  color: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+  text-align: center;
+  border: none;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-secondary {
+  background: #FFFFFF;
+  color: #1A1A2E;
+  border: 2rpx solid #1A1A2E;
+  border-radius: 12rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+  text-align: center;
+}
+
+/* 标签样式 */
+.tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  margin-right: 8rpx;
+}
+
+.tag-college {
+  background: #E8F4FD;
+  color: #1890FF;
+}
+
+.tag-school {
+  background: #FFF7E6;
+  color: #FA8C16;
+}
+
+.tag-city {
+  background: #FFF1F0;
+  color: #F5222D;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-state .empty-text {
+  color: #999999;
+  font-size: 28rpx;
+  margin-top: 20rpx;
+}
+
+/* 动画基础类 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 列表项交错动画 */
+.stagger-item {
+  opacity: 0;
+  animation: fadeIn 0.3s ease-in-out forwards;
+}

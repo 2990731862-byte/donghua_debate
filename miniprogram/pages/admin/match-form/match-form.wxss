@@ -1,0 +1,321 @@
+/* 步骤指示器 */
+.steps-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+  margin-bottom: 24rpx;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-dot {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #E0E0E0;
+  color: #999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-dot {
+  background: #1A1A2E;
+  color: #FFFFFF;
+}
+
+.step-label {
+  font-size: 20rpx;
+  color: #999999;
+  margin-top: 6rpx;
+}
+
+.step.active .step-label {
+  color: #1A1A2E;
+  font-weight: 500;
+}
+
+.step-line {
+  width: 40rpx;
+  height: 4rpx;
+  background: #E0E0E0;
+  margin: 0 8rpx;
+  margin-bottom: 30rpx;
+  transition: background 0.3s ease;
+}
+
+.step-line.active {
+  background: #1A1A2E;
+}
+
+/* 步骤内容 */
+.step-content {
+  padding: 24rpx;
+}
+
+.step-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+  margin-bottom: 24rpx;
+}
+
+.step-hint {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 16rpx;
+}
+
+/* 表单 */
+.form-group {
+  margin-bottom: 24rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 8rpx;
+}
+
+.form-input {
+  background: #F6F6F6;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+}
+
+.picker-input {
+  display: flex;
+  align-items: center;
+}
+
+/* 级别选择 */
+.level-picker {
+  display: flex;
+  gap: 12rpx;
+}
+
+.level-option {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  background: #F6F6F6;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #666666;
+  transition: all 0.3s ease;
+}
+
+.level-option.active {
+  background: #1A1A2E;
+  color: #FFFFFF;
+}
+
+/* 轮次选择 */
+.round-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.round-option {
+  padding: 12rpx 24rpx;
+  background: #F6F6F6;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+  color: #666666;
+  transition: all 0.2s ease;
+}
+
+.round-option.active {
+  background: #1A1A2E;
+  color: #FFFFFF;
+}
+
+.round-option.best.active {
+  background: #FA8C16;
+  color: #FFFFFF;
+}
+
+.hint-text {
+  font-size: 22rpx;
+  color: #CCCCCC;
+}
+
+/* 辩手选择列表 */
+.debater-select-list {
+  max-height: 600rpx;
+  overflow-y: scroll;
+}
+
+.debater-select-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 16rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+  transition: background 0.2s ease;
+}
+
+.debater-select-item.selected {
+  background: #F0F5FF;
+}
+
+.select-check {
+  width: 40rpx;
+  height: 40rpx;
+  border: 3rpx solid #DDDDDD;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #FFFFFF;
+  margin-right: 16rpx;
+  transition: all 0.2s ease;
+}
+
+.debater-select-item.selected .select-check {
+  background: #1A1A2E;
+  border-color: #1A1A2E;
+}
+
+.select-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-right: 12rpx;
+}
+
+.select-college {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.selected-count {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999999;
+  padding: 16rpx 0;
+}
+
+/* 参赛者详情卡片 */
+.participant-card {
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.participant-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+  margin-bottom: 16rpx;
+}
+
+/* Checkbox */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0;
+}
+
+.checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  border: 3rpx solid #DDDDDD;
+  border-radius: 6rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #FFFFFF;
+  margin-right: 12rpx;
+  transition: all 0.2s ease;
+}
+
+.checkbox.checked {
+  background: #E94560;
+  border-color: #E94560;
+}
+
+.checkbox-label {
+  font-size: 26rpx;
+  color: #333333;
+}
+
+/* 确认页 */
+.confirm-section {
+  margin-bottom: 24rpx;
+}
+
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.confirm-label {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.confirm-value {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.confirm-participants {
+  margin-top: 16rpx;
+}
+
+.confirm-participant {
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.cp-name {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.cp-detail {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 4rpx;
+}
+
+.cp-top3 {
+  color: #E94560;
+}
+
+/* 步骤按钮 */
+.step-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+
+.step-buttons .btn-secondary,
+.step-buttons .btn-primary {
+  flex: 1;
+}
+
+.submit-btn {
+  background: #E94560;
+}

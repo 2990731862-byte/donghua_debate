@@ -1,0 +1,61 @@
+<view class="container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view
+      class="filter-item {{currentFilter === '全部' ? 'active' : ''}}"
+      bindtap="onFilterChange"
+      data-filter="全部"
+    >
+      <text>全部</text>
+    </view>
+    <view
+      class="filter-item {{currentFilter === '院赛' ? 'active' : ''}}"
+      bindtap="onFilterChange"
+      data-filter="院赛"
+    >
+      <text>院赛</text>
+    </view>
+    <view
+      class="filter-item {{currentFilter === '校赛' ? 'active' : ''}}"
+      bindtap="onFilterChange"
+      data-filter="校赛"
+    >
+      <text>校赛</text>
+    </view>
+    <view
+      class="filter-item {{currentFilter === '市赛' ? 'active' : ''}}"
+      bindtap="onFilterChange"
+      data-filter="市赛"
+    >
+      <text>市赛</text>
+    </view>
+  </view>
+
+  <!-- 排行榜列表 -->
+  <view class="leaderboard-list" wx:if="{{!loading && debaters.length > 0}}">
+    <rank-card
+      wx:for="{{debaters}}"
+      wx:key="_id"
+      debater="{{item}}"
+      index="{{index}}"
+    />
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore && !loading}}" bindtap="loadMore">
+    <text>加载更多</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && debaters.length === 0}}">
+    <text class="empty-icon">📊</text>
+    <text class="empty-text">暂无积分数据</text>
+    <text class="empty-hint">等待管理员录入比赛结果</text>
+  </view>
+</view>

@@ -1,0 +1,62 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索辩手姓名或学院"
+        value="{{keyword}}"
+        bindinput="onInput"
+        bindconfirm="onSearch"
+        confirm-type="search"
+      />
+      <view class="search-clear" wx:if="{{keyword}}" bindtap="onClear">
+        <text>✕</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{searched && results.length > 0}}">
+    <text class="result-count">找到 {{results.length}} 位辩手</text>
+    <rank-card
+      wx:for="{{results}}"
+      wx:key="_id"
+      debater="{{item}}"
+      index="{{index}}"
+    />
+  </view>
+
+  <!-- 搜索中 -->
+  <view class="loading-container" wx:if="{{searching}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">搜索中...</text>
+  </view>
+
+  <!-- 无结果 -->
+  <view class="empty-state" wx:if="{{searched && !searching && results.length === 0}}">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">未找到匹配的辩手</text>
+    <text class="empty-hint">试试其他关键词</text>
+  </view>
+
+  <!-- 最近搜索 -->
+  <view class="recent-section" wx:if="{{!searched && recentSearches.length > 0}}">
+    <view class="recent-header">
+      <text class="section-title">最近搜索</text>
+      <text class="clear-history" bindtap="clearHistory">清除</text>
+    </view>
+    <view class="recent-tags">
+      <view
+        class="recent-tag"
+        wx:for="{{recentSearches}}"
+        wx:key="*this"
+        bindtap="onRecentTap"
+        data-keyword="{{item}}"
+      >
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+</view>

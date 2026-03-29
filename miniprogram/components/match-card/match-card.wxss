@@ -1,0 +1,106 @@
+.match-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.match-header {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+}
+
+.match-info {
+  flex: 1;
+}
+
+.match-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.match-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.match-date {
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 6rpx;
+  display: block;
+}
+
+.match-score {
+  margin-right: 16rpx;
+}
+
+.score-num {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #E94560;
+}
+
+.expand-icon {
+  font-size: 32rpx;
+  color: #CCCCCC;
+  transition: transform 0.3s ease;
+  transform: rotate(0deg);
+}
+
+.expand-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.match-detail {
+  padding: 0 24rpx 24rpx;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000rpx;
+  }
+}
+
+.tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  font-size: 20rpx;
+}
+
+.tag-college {
+  background: #E8F4FD;
+  color: #1890FF;
+}
+
+.tag-school {
+  background: #FFF7E6;
+  color: #FA8C16;
+}
+
+.tag-city {
+  background: #FFF1F0;
+  color: #F5222D;
+}
+
+.participants-summary {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.summary-label {
+  font-size: 22rpx;
+  color: #999999;
+}

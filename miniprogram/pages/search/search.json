@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "搜索辩手",
+  "usingComponents": {
+    "rank-card": "../../components/rank-card/rank-card"
+  }
+}

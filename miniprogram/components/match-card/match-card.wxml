@@ -1,0 +1,24 @@
+<view class="match-card stagger-item" style="{{animationStyle}}">
+  <view class="match-header" bindtap="toggleExpand">
+    <view class="match-info">
+      <view class="match-title-row">
+        <text class="match-name">{{match.name}}</text>
+        <text class="tag {{match.level === '院赛' ? 'tag-college' : match.level === '校赛' ? 'tag-school' : 'tag-city'}}">{{match.level}}</text>
+      </view>
+      <text class="match-date">{{match.date}}</text>
+    </view>
+    <view class="match-score" wx:if="{{participantScore !== null}}">
+      <text class="score-num">+{{participantScore}}</text>
+    </view>
+    <view class="expand-icon {{expanded ? 'expanded' : ''}}">
+      <text>›</text>
+    </view>
+  </view>
+
+  <view class="match-detail" wx:if="{{expanded}}">
+    <score-breakdown breakdown="{{match.scoreBreakdown}}" wx:if="{{match.scoreBreakdown}}" />
+    <view class="participants-summary" wx:if="{{match.participants}}">
+      <text class="summary-label">参赛人数: {{match.participants.length}}</text>
+    </view>
+  </view>
+</view>

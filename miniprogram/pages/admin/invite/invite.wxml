@@ -1,0 +1,41 @@
+<view class="container">
+  <!-- 生成邀请码 -->
+  <view class="card generate-card fade-in">
+    <text class="section-title">生成邀请码</text>
+    <text class="hint">邀请码有效期为7天，可用于授权新管理员</text>
+
+    <view class="btn-primary generate-btn" bindtap="generateCode">
+      生成新邀请码
+    </view>
+
+    <!-- 显示刚生成的邀请码 -->
+    <view class="new-code-display" wx:if="{{newCode}}">
+      <text class="code-value">{{newCode}}</text>
+      <text class="code-hint">请复制并发送给新管理员</text>
+      <view class="btn-secondary copy-btn" bindtap="copyCode">
+        复制邀请码
+      </view>
+    </view>
+  </view>
+
+  <!-- 邀请码列表 -->
+  <view class="card fade-in" style="animation-delay: 0.1s">
+    <text class="section-title">邀请码记录</text>
+
+    <view class="code-list">
+      <view class="code-item" wx:for="{{codes}}" wx:key="_id">
+        <view class="code-info">
+          <text class="code-text">{{item.code}}</text>
+          <text class="code-status {{item.used ? 'used' : (item.expired ? 'expired' : 'active')}}">
+            {{item.used ? '已使用' : (item.expired ? '已过期' : '有效')}}
+          </text>
+        </view>
+        <text class="code-date">{{item.createdAtStr}}</text>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{codes.length === 0}}">
+      <text class="empty-text">暂无邀请码记录</text>
+    </view>
+  </view>
+</view>

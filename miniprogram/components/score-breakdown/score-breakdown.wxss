@@ -1,0 +1,88 @@
+.breakdown-container {
+  padding: 8rpx 0;
+}
+
+.breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.breakdown-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.breakdown-total {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #E94560;
+}
+
+.round-item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.round-item:last-child {
+  border-bottom: none;
+}
+
+.round-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.round-label {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.round-score {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+}
+
+.round-detail {
+  margin-top: 8rpx;
+}
+
+.detail-item {
+  font-size: 22rpx;
+  color: #999999;
+  margin-right: 20rpx;
+}
+
+.round-tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8rpx;
+  gap: 8rpx;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  font-size: 20rpx;
+}
+
+.tag-best {
+  background: #FFF7E6;
+  color: #FA8C16;
+}
+
+.tag-top3 {
+  background: #FFF1F0;
+  color: #F5222D;
+}
+
+.tag-record {
+  background: #F0F5FF;
+  color: #2F54EB;
+}

@@ -1,0 +1,86 @@
+<view class="container">
+  <!-- 头部 -->
+  <view class="header-card card">
+    <text class="app-title">东华大学辩手积分榜</text>
+    <text class="app-subtitle">东华大学辩论协会</text>
+
+    <!-- 管理入口 -->
+    <view class="admin-entry" bindtap="goAdmin">
+      <text class="admin-icon">⚙️</text>
+    </view>
+  </view>
+
+  <!-- 积分规则 -->
+  <view class="card">
+    <text class="section-title">积分规则</text>
+
+    <view class="rule-section">
+      <text class="rule-subtitle">计算公式</text>
+      <text class="rule-text">轮次积分 = 基础奖励 + 破纪录奖励</text>
+      <text class="rule-text">比赛总积分 = 各轮次积分之和（向下取0.5倍数）</text>
+    </view>
+
+    <view class="rule-section">
+      <text class="rule-subtitle">基础奖励</text>
+      <text class="rule-text">• 轮次基础分 = 0.5 × W × 轮次号</text>
+      <text class="rule-text">• 最佳辩手 = 0.5 × W</text>
+      <text class="rule-text">• 前三名（比赛最终名次） = W</text>
+    </view>
+
+    <view class="rule-section">
+      <text class="rule-subtitle">赛事权重 W</text>
+      <view class="weight-table">
+        <view class="weight-row">
+          <text class="weight-label tag tag-college">院赛</text>
+          <text class="weight-value">W = 1</text>
+        </view>
+        <view class="weight-row">
+          <text class="weight-label tag tag-school">校赛</text>
+          <text class="weight-value">W = 2</text>
+        </view>
+        <view class="weight-row">
+          <text class="weight-label tag tag-city">市赛</text>
+          <text class="weight-value">W = 4</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="rule-section">
+      <text class="rule-subtitle">破纪录奖励</text>
+      <text class="rule-text">当辩手在某级别赛事中超过个人历史最高纪录时，可获得额外奖励积分。</text>
+      <text class="rule-text">• 破纪录轮次分 = 0.5×log₂(W) + 0.5×⌊0.5×轮次号⌋</text>
+      <text class="rule-text">• 破纪录佳辩/前三分 = 0.5 × W</text>
+    </view>
+
+    <view class="rule-section">
+      <text class="rule-subtitle">参考积分表（基础奖励）</text>
+      <view class="score-table">
+        <view class="table-header">
+          <text class="table-cell">轮次</text>
+          <text class="table-cell">院赛</text>
+          <text class="table-cell">校赛</text>
+          <text class="table-cell">市赛</text>
+        </view>
+        <view class="table-row" wx:for="{{scoreTable}}" wx:key="round">
+          <text class="table-cell">{{item.round}}</text>
+          <text class="table-cell">{{item.college}}</text>
+          <text class="table-cell">{{item.school}}</text>
+          <text class="table-cell">{{item.city}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 汇报机制 -->
+  <view class="card">
+    <text class="section-title">积分汇报</text>
+    <text class="rule-text">比赛结束后，队长或联系人须在3个工作日内将比赛信息提交至辩协。</text>
+    <text class="rule-text">信息包括：比赛名称、时间、对手、赛果、上场队员、最佳辩手、获奖名次等。</text>
+  </view>
+
+  <!-- 版权信息 -->
+  <view class="footer">
+    <text class="footer-text">东华大学辩论协会</text>
+    <text class="footer-text">2026年3月起试行</text>
+  </view>
+</view>

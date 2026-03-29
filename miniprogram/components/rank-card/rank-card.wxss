@@ -1,0 +1,87 @@
+.rank-card {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.rank-card:active {
+  transform: scale(0.98);
+}
+
+.rank-number {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rank-top {
+  /* 前三名的排名区域稍微放大 */
+}
+
+.medal {
+  font-size: 44rpx;
+}
+
+.rank-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #999999;
+}
+
+.debater-info {
+  flex: 1;
+  margin-left: 16rpx;
+  overflow: hidden;
+}
+
+.debater-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  display: block;
+}
+
+.debater-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 6rpx;
+}
+
+.debater-college {
+  font-size: 22rpx;
+  color: #999999;
+  margin-right: 16rpx;
+}
+
+.debater-matches {
+  font-size: 22rpx;
+  color: #BBBBBB;
+}
+
+.score-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.score-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #E94560;
+}
+
+.score-label {
+  font-size: 20rpx;
+  color: #999999;
+  margin-top: 2rpx;
+}

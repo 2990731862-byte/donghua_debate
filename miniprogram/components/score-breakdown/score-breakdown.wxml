@@ -1,0 +1,26 @@
+<view class="breakdown-container">
+  <view class="breakdown-header">
+    <text class="breakdown-title">积分明细</text>
+    <text class="breakdown-total">总计 {{breakdown.matchTotal}} 分</text>
+  </view>
+
+  <view class="round-list">
+    <view class="round-item" wx:for="{{breakdown.roundDetails}}" wx:key="round">
+      <view class="round-header">
+        <text class="round-label">第{{item.round}}轮</text>
+        <text class="round-score">+{{item.roundScore}}</text>
+      </view>
+
+      <view class="round-detail">
+        <text class="detail-item">基础分: +{{item.baseReward}}</text>
+        <text class="detail-item" wx:if="{{item.recordBonus > 0}}">破纪录: +{{item.recordBonus}}</text>
+      </view>
+
+      <view class="round-tags">
+        <text class="tag tag-best" wx:if="{{item.isBestDebater}}">最佳辩手</text>
+        <text class="tag tag-top3" wx:if="{{item.isTopThree}}">前三名</text>
+        <text class="tag tag-record" wx:if="{{item.isRecordBreakingRound}}">破轮次纪录</text>
+      </view>
+    </view>
+  </view>
+</view>

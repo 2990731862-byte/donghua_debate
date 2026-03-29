@@ -1,0 +1,137 @@
+.add-btn {
+  margin-bottom: 24rpx;
+}
+
+.debater-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+}
+
+.debater-info {
+  flex: 1;
+}
+
+.debater-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.debater-meta {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 6rpx;
+}
+
+.debater-actions {
+  display: flex;
+  gap: 12rpx;
+}
+
+.action-btn {
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+}
+
+.edit-btn {
+  background: #E8F4FD;
+  color: #1890FF;
+}
+
+.delete-btn {
+  background: #FFF1F0;
+  color: #F5222D;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  width: 80%;
+  max-width: 600rpx;
+  padding: 40rpx;
+  animation: scaleIn 0.2s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.form-group {
+  margin-bottom: 24rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 8rpx;
+}
+
+.form-input {
+  background: #F6F6F6;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+
+.form-buttons .btn-secondary,
+.form-buttons .btn-primary {
+  flex: 1;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx;
+}
+
+.empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 16rpx;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #999999;
+}

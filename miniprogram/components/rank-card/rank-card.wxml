@@ -1,0 +1,32 @@
+<view class="rank-card stagger-item" style="{{animationStyle}}" bindtap="onTapCard">
+  <!-- 排名 -->
+  <view class="rank-number {{debater.rank <= 3 ? 'rank-top' : ''}}">
+    <block wx:if="{{debater.rank === 1}}">
+      <text class="medal">🥇</text>
+    </block>
+    <block wx:elif="{{debater.rank === 2}}">
+      <text class="medal">🥈</text>
+    </block>
+    <block wx:elif="{{debater.rank === 3}}">
+      <text class="medal">🥉</text>
+    </block>
+    <block wx:else>
+      <text class="rank-text">{{debater.rank}}</text>
+    </block>
+  </view>
+
+  <!-- 辩手信息 -->
+  <view class="debater-info">
+    <text class="debater-name">{{debater.name}}</text>
+    <view class="debater-meta">
+      <text class="debater-college">{{debater.college}}</text>
+      <text class="debater-matches">{{debater.matchCount}}场比赛</text>
+    </view>
+  </view>
+
+  <!-- 积分 -->
+  <view class="score-section">
+    <text class="score-value">{{debater.totalScore}}</text>
+    <text class="score-label">积分</text>
+  </view>
+</view>
