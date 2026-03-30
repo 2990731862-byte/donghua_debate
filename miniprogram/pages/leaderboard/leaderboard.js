@@ -8,12 +8,15 @@ Page({
     pageSize: 20
   },
 
+  _requestId: 0,
+
   onLoad() {
     this.loadLeaderboard()
   },
 
   onPullDownRefresh() {
-    this.setData({ page: 0, debaters: [] })
+    this._requestId++
+    this.setData({ page: 0, debaters: [], loading: true })
     this.loadLeaderboard().then(() => {
       wx.stopPullDownRefresh()
     })
@@ -22,6 +25,7 @@ Page({
   onFilterChange(e) {
     const filter = e.currentTarget.dataset.filter
     if (filter === this.data.currentFilter) return
+    this._requestId++
     this.setData({
       currentFilter: filter,
       page: 0,
@@ -33,6 +37,7 @@ Page({
 
   loadLeaderboard() {
     this.setData({ loading: true })
+    const requestId = ++this._requestId
 
     return wx.cloud.callFunction({
       name: 'getLeaderboard',
@@ -42,6 +47,7 @@ Page({
         limit: this.data.pageSize
       }
     }).then(res => {
+      if (requestId !== this._requestId) return
       const newDebaters = res.result.data || []
       this.setData({
         debaters: this.data.debaters.concat(newDebaters),
@@ -49,6 +55,7 @@ Page({
         loading: false
       })
     }).catch(err => {
+      if (requestId !== this._requestId) return
       console.error('加载排行榜失败', err)
       this.setData({ loading: false })
       wx.showToast({ title: '加载失败', icon: 'none' })
@@ -56,6 +63,7 @@ Page({
   },
 
   loadMore() {
+    if (this.data.loading) return
     this.setData({ page: this.data.page + 1 })
     this.loadLeaderboard()
   }

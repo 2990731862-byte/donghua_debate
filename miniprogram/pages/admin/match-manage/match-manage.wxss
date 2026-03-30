@@ -356,6 +356,11 @@
   z-index: 10;
 }
 
+/* 为固定底部栏留出空间 */
+.container {
+  padding-bottom: 120rpx !important;
+}
+
 .switch-btn {
   flex: 1;
   text-align: center;
