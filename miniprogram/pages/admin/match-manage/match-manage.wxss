@@ -277,6 +277,39 @@
   color: #1890FF;
 }
 
+.detail-expand {
+  font-size: 22rpx;
+  color: #1890FF;
+  padding: 4rpx 0;
+}
+
+.detail-breakdown {
+  border-top: 1rpx solid #F0F0F0;
+  padding: 16rpx 24rpx;
+}
+
+.bd-round {
+  padding: 8rpx 0;
+}
+
+.bd-round + .bd-round {
+  border-top: 1rpx dashed #F0F0F0;
+}
+
+.bd-title {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.bd-line {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 4rpx;
+  line-height: 1.5;
+}
+
 .detail-del {
   font-size: 22rpx;
   color: #F5222D;

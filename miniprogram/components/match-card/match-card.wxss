@@ -104,6 +104,38 @@
   color: #666666;
 }
 
+.tag-best {
+  background: #FFF7E6;
+  color: #D48806;
+}
+
+.tag-top3 {
+  background: #F6FFED;
+  color: #389E0D;
+}
+
+.breakdown-box {
+  padding: 16rpx 0;
+}
+
+.breakdown-round {
+  padding: 8rpx 0;
+}
+
+.bd-title {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.bd-line {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 4rpx;
+  line-height: 1.5;
+}
+
 .participants-summary {
   margin-top: 16rpx;
   padding-top: 16rpx;

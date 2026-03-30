@@ -45,15 +45,18 @@ Page({
         }
       }
 
-      // 为每场比赛标注该辩手的得分
+      // 为每场比赛标注该辩手的得分和状态
       const processedMatches = matches.map(match => {
         const participant = (match.participants || []).find(
           p => p.debaterId === debaterId
         )
+        const round = match.totalRounds
         return {
           ...match,
           participantScore: participant ? participant.scoreBreakdown.matchTotal : null,
-          scoreBreakdown: participant ? participant.scoreBreakdown : null
+          scoreBreakdown: participant ? participant.scoreBreakdown : null,
+          isBestDebater: participant ? (participant.bestDebaterRounds || []).includes(round) : false,
+          isTopThree: participant ? (participant.topThreeFinish || false) : false
         }
       })
 

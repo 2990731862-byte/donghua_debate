@@ -9,7 +9,8 @@ Page({
     groupedMatches: [],
     detailRecords: [],
     sortMode: 'time',
-    expandedGroups: {}
+    expandedGroups: {},
+    expandedDetails: []
   },
 
   onLoad() {
@@ -101,7 +102,47 @@ Page({
     this.setData({ [key]: !this.data.expandedGroups[name] })
   },
 
+  toggleDetail(e) {
+    const idx = e.currentTarget.dataset.idx
+    const key = `expandedDetails[${idx}]`
+    this.setData({ [key]: !this.data.expandedDetails[idx] })
+  },
+
+  formatBreakdown(scoreBreakdown, weight) {
+    if (!scoreBreakdown || !scoreBreakdown.roundDetails) return []
+    const W = weight || 1
+    return scoreBreakdown.roundDetails.map(function (rd) {
+      var item = { round: rd.round, lines: [] }
+      item.lines.push('基础分 +' + (0.5 * W * rd.round).toFixed(1))
+      if (rd.isBestDebater) {
+        item.lines.push('最佳辩手 +' + (0.5 * W).toFixed(1))
+      }
+      if (rd.isTopThree) {
+        item.lines.push('前三名 +' + W.toFixed(1))
+      }
+      if (rd.recordBonus > 0) {
+        var parts = []
+        if (rd.isRecordBreakingRound) {
+          var rbRound = (0.5 * Math.log2(Math.max(1, W)) + 0.5 * Math.floor(0.5 * rd.round)).toFixed(1)
+          parts.push('轮次+' + rbRound)
+        }
+        if (rd.isRecordBreakingBestDebater) {
+          parts.push('佳辩+' + (0.5 * W).toFixed(1))
+        }
+        if (rd.isRecordBreakingTopThree) {
+          parts.push('前三+' + (0.5 * W).toFixed(1))
+        }
+        if (parts.length > 0) {
+          item.lines.push('破纪录奖励 ' + parts.join(' '))
+        }
+      }
+      item.lines.push('本轮合计 +' + rd.roundScore.toFixed(1))
+      return item
+    })
+  },
+
   buildDetails(matchList) {
+    const self = this
     const records = []
     for (const m of matchList) {
       for (const p of (m.participants || [])) {
@@ -114,9 +155,11 @@ Page({
           matchStage: m.stage || '',
           matchDate: m.date,
           round: m.totalRounds,
+          weight: m.weight || 1,
           isBestDebater: (p.bestDebaterRounds || []).includes(m.totalRounds),
           isTopThree: p.topThreeFinish || false,
-          score: (p.scoreBreakdown && p.scoreBreakdown.matchTotal) || 0
+          score: (p.scoreBreakdown && p.scoreBreakdown.matchTotal) || 0,
+          breakdownLines: self.formatBreakdown(p.scoreBreakdown, m.weight || 1)
         })
       }
     }

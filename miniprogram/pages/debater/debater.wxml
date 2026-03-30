@@ -62,6 +62,8 @@
       wx:key="_id"
       match="{{item}}"
       participantScore="{{item.participantScore}}"
+      isBestDebater="{{item.isBestDebater}}"
+      isTopThree="{{item.isTopThree}}"
       index="{{index}}"
     />
     <view class="empty-state" wx:if="{{matches.length === 0}}">

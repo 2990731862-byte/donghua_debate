@@ -45,7 +45,7 @@
       <view class="sort-btn {{sortMode === 'name' ? 'active' : ''}}" bindtap="switchSort" data-mode="name">按辩手</view>
     </view>
     <view class="detail-card card" wx:for="{{detailRecords}}" wx:key="matchId+debaterId">
-      <view class="detail-main">
+      <view class="detail-main" bindtap="toggleDetail" data-idx="{{index}}">
         <text class="detail-name">{{item.debaterName}}</text>
         <text class="detail-match">{{item.matchName}}</text>
         <view class="detail-tags">
@@ -59,7 +59,14 @@
       </view>
       <view class="detail-right">
         <text class="detail-score">+{{item.score}}</text>
+        <text class="detail-expand" wx:if="{{item.breakdownLines.length > 0}}">{{expandedDetails[index] ? '收起' : '明细'}}</text>
         <view class="detail-del" catchtap="deleteParticipant" data-matchid="{{item.matchId}}" data-debaterid="{{item.debaterId}}" data-debatername="{{item.debaterName}}" data-matchname="{{item.matchName}}">删除</view>
+      </view>
+      <view class="detail-breakdown" wx:if="{{expandedDetails[index] && item.breakdownLines.length > 0}}">
+        <view class="bd-round" wx:for="{{item.breakdownLines}}" wx:for-item="rd" wx:key="round">
+          <text class="bd-title">第{{rd.round}}轮</text>
+          <text class="bd-line" wx:for="{{rd.lines}}" wx:key="*this">{{item}}</text>
+        </view>
       </view>
     </view>
   </view>

@@ -6,6 +6,8 @@
         <text class="tag {{match.level === '院赛' ? 'tag-college' : match.level === '校赛' ? 'tag-school' : 'tag-city'}}">{{match.level}}</text>
         <text class="tag tag-stage" wx:if="{{match.stage}}">{{match.stage}}</text>
         <text class="tag tag-round">第{{match.totalRounds}}轮</text>
+        <text class="tag tag-best" wx:if="{{isBestDebater}}">佳辩</text>
+        <text class="tag tag-top3" wx:if="{{isTopThree}}">前三</text>
       </view>
       <text class="match-date">{{match.date}}</text>
     </view>
@@ -18,7 +20,12 @@
   </view>
 
   <view class="match-detail" wx:if="{{expanded}}">
-    <score-breakdown breakdown="{{match.scoreBreakdown}}" wx:if="{{match.scoreBreakdown}}" />
+    <view class="breakdown-box" wx:if="{{breakdownLines.length > 0}}">
+      <view class="breakdown-round" wx:for="{{breakdownLines}}" wx:key="round">
+        <text class="bd-title">第{{item.round}}轮</text>
+        <text class="bd-line" wx:for="{{item.lines}}" wx:for-item="line" wx:key="*this">{{line}}</text>
+      </view>
+    </view>
     <view class="participants-summary" wx:if="{{match.participants}}">
       <text class="summary-label">参赛人数: {{match.participants.length}}</text>
     </view>
