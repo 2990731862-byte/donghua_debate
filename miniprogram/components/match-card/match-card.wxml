@@ -4,6 +4,8 @@
       <view class="match-title-row">
         <text class="match-name">{{match.name}}</text>
         <text class="tag {{match.level === '院赛' ? 'tag-college' : match.level === '校赛' ? 'tag-school' : 'tag-city'}}">{{match.level}}</text>
+        <text class="tag tag-stage" wx:if="{{match.stage}}">{{match.stage}}</text>
+        <text class="tag tag-round">第{{match.totalRounds}}轮</text>
       </view>
       <text class="match-date">{{match.date}}</text>
     </view>

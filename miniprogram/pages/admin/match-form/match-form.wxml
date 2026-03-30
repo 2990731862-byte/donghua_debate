@@ -68,6 +68,30 @@
     </view>
 
     <view class="form-group">
+      <text class="form-label">赛程</text>
+      <view class="stage-picker">
+        <view class="level-option {{matchStage === '初赛' ? 'active' : ''}}" bindtap="onStageChange" data-stage="初赛">
+          <text>初赛</text>
+        </view>
+        <view class="level-option {{matchStage === '小组赛' ? 'active' : ''}}" bindtap="onStageChange" data-stage="小组赛">
+          <text>小组赛</text>
+        </view>
+        <view class="level-option {{matchStage === '复赛' ? 'active' : ''}}" bindtap="onStageChange" data-stage="复赛">
+          <text>复赛</text>
+        </view>
+        <view class="level-option {{matchStage === '半决赛' ? 'active' : ''}}" bindtap="onStageChange" data-stage="半决赛">
+          <text>半决赛</text>
+        </view>
+        <view class="level-option {{matchStage === '决赛' ? 'active' : ''}}" bindtap="onStageChange" data-stage="决赛">
+          <text>决赛</text>
+        </view>
+        <view class="level-option {{matchStage === '复活赛' ? 'active' : ''}}" bindtap="onStageChange" data-stage="复活赛">
+          <text>复活赛</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-group">
       <text class="form-label">轮次</text>
       <view class="round-picker">
         <view
@@ -162,6 +186,10 @@
       <view class="confirm-row">
         <text class="confirm-label">比赛日期</text>
         <text class="confirm-value">{{matchDate}}</text>
+      </view>
+      <view class="confirm-row">
+        <text class="confirm-label">赛程</text>
+        <text class="confirm-value">{{matchStage}}</text>
       </view>
       <view class="confirm-row">
         <text class="confirm-label">轮次</text>

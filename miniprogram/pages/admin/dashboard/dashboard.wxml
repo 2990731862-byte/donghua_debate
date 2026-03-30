@@ -28,6 +28,15 @@
       <text class="action-arrow">›</text>
     </view>
 
+    <view class="action-card card" bindtap="goMatchManage">
+      <text class="action-icon">📋</text>
+      <view class="action-info">
+        <text class="action-title">比赛记录</text>
+        <text class="action-desc">查看、管理已录入的比赛</text>
+      </view>
+      <text class="action-arrow">›</text>
+    </view>
+
     <view class="action-card card" bindtap="goDebaterManage">
       <text class="action-icon">👥</text>
       <view class="action-info">

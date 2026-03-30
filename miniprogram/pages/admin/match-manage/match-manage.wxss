@@ -1,0 +1,329 @@
+/* 搜索 */
+.filter-bar {
+  margin-bottom: 16rpx;
+}
+
+.filter-input {
+  background: #F6F6F6;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+}
+
+/* 排序栏 */
+.sort-bar {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.sort-btn {
+  flex: 1;
+  text-align: center;
+  padding: 14rpx 0;
+  border-radius: 10rpx;
+  font-size: 26rpx;
+  color: #666666;
+  background: #F6F6F6;
+}
+
+.sort-btn.active {
+  background: #1A1A2E;
+  color: #FFFFFF;
+}
+
+/* 通用标签 */
+.tag {
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  display: inline-block;
+  margin-right: 8rpx;
+}
+
+.tag-college {
+  background: #E6F7FF;
+  color: #1890FF;
+}
+
+.tag-university {
+  background: #FFF7E6;
+  color: #FA8C16;
+}
+
+.tag-city {
+  background: #FFF1F0;
+  color: #F5222D;
+}
+
+.tag-default {
+  background: #F6F6F6;
+  color: #666666;
+}
+
+.tag-stage {
+  background: #F0F5FF;
+  color: #2F54EB;
+}
+
+.tag-round {
+  background: #F6F6F6;
+  color: #666666;
+}
+
+.tag-best {
+  background: #FFF7E6;
+  color: #D48806;
+}
+
+.tag-top3 {
+  background: #F6FFED;
+  color: #389E0D;
+}
+
+/* ====== Tab1: 比赛记录 ====== */
+.match-group {
+  margin-bottom: 16rpx;
+  overflow: hidden;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+}
+
+.group-info {
+  flex: 1;
+}
+
+.group-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+}
+
+.group-meta {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 6rpx;
+  flex-wrap: wrap;
+  gap: 4rpx;
+}
+
+.meta-text {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.group-arrow {
+  font-size: 24rpx;
+  color: #1890FF;
+  margin-left: 16rpx;
+}
+
+.group-matches {
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.round-block {
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.round-block:last-child {
+  border-bottom: none;
+}
+
+.round-header {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: #FAFAFA;
+}
+
+.round-title {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-right: 12rpx;
+}
+
+.round-date {
+  font-size: 22rpx;
+  color: #999999;
+  flex: 1;
+}
+
+.round-del {
+  font-size: 22rpx;
+  color: #F5222D;
+  padding: 4rpx 16rpx;
+}
+
+.participant-row {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 24rpx 12rpx 40rpx;
+  border-bottom: 1rpx solid #F9F9F9;
+}
+
+.participant-row:last-child {
+  border-bottom: none;
+}
+
+.p-name {
+  flex: 1;
+  font-size: 26rpx;
+  color: #333333;
+}
+
+.p-badge {
+  font-size: 20rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 4rpx;
+  margin-right: 8rpx;
+}
+
+.p-best {
+  background: #FFF7E6;
+  color: #D48806;
+}
+
+.p-top3 {
+  background: #F6FFED;
+  color: #389E0D;
+}
+
+.p-score {
+  font-size: 24rpx;
+  color: #1890FF;
+  margin-right: 12rpx;
+}
+
+.p-del {
+  font-size: 24rpx;
+  color: #CCCCCC;
+  width: 36rpx;
+  height: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.p-del:active {
+  background: #FFF1F0;
+  color: #F5222D;
+}
+
+/* ====== Tab2: 积分明细 ====== */
+.detail-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.detail-main {
+  flex: 1;
+}
+
+.detail-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A2E;
+}
+
+.detail-match {
+  display: block;
+  font-size: 24rpx;
+  color: #666666;
+  margin-top: 4rpx;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rpx;
+  margin-top: 8rpx;
+}
+
+.detail-tags .tag {
+  margin-right: 0;
+}
+
+.detail-date {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 6rpx;
+}
+
+.detail-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 16rpx;
+}
+
+.detail-score {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1890FF;
+}
+
+.detail-del {
+  font-size: 22rpx;
+  color: #F5222D;
+  padding: 4rpx 16rpx;
+  margin-top: 8rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx;
+}
+
+.empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 16rpx;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+/* 底部Tab */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background: #FFFFFF;
+  border-top: 1rpx solid #F0F0F0;
+  padding: 16rpx 0 env(safe-area-inset-bottom);
+  z-index: 10;
+}
+
+.switch-btn {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx;
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.switch-btn.active {
+  color: #1A1A2E;
+  font-weight: 600;
+}

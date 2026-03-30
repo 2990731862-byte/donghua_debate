@@ -92,7 +92,7 @@ exports.main = async (event) => {
     return { success: false, message: '无权限' }
   }
 
-  const { name, level, date, totalRounds, participants } = matchData
+  const { name, level, stage, date, totalRounds, participants } = matchData
 
   // 参数验证
   if (!name || !level || !date || !participants || participants.length === 0) {
@@ -154,6 +154,7 @@ exports.main = async (event) => {
     data: {
       name,
       level,
+      stage: stage || '',
       weight: W,
       date,
       totalRounds: totalRounds || 0,

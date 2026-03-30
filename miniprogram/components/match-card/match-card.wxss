@@ -94,6 +94,16 @@
   color: #F5222D;
 }
 
+.tag-stage {
+  background: #F0F5FF;
+  color: #2F54EB;
+}
+
+.tag-round {
+  background: #F6F6F6;
+  color: #666666;
+}
+
 .participants-summary {
   margin-top: 16rpx;
   padding-top: 16rpx;

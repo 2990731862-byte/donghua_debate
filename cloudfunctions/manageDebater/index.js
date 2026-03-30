@@ -70,5 +70,10 @@ exports.main = async (event) => {
     return { success: true, data: result.data }
   }
 
+  if (action === 'count') {
+    const result = await db.collection('debaters').count()
+    return { success: true, count: result.total }
+  }
+
   return { success: false, message: '未知操作' }
 }

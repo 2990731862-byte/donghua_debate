@@ -20,6 +20,12 @@ Page({
     })
   },
 
+  onShow() {
+    if (this.data.authorized) {
+      this.loadStats()
+    }
+  },
+
   loadRole() {
     checkAdminStatus().then(result => {
       this.setData({ role: result.role })
@@ -27,27 +33,31 @@ Page({
   },
 
   loadStats() {
-    // 获取辩手数量
     wx.cloud.callFunction({
       name: 'manageDebater',
-      data: { action: 'list' }
+      data: { action: 'count' }
     }).then(res => {
       if (res.result.success) {
-        this.setData({ 'stats.debaterCount': res.result.data.length })
+        this.setData({ 'stats.debaterCount': res.result.count })
       }
     })
 
-    // 简单获取比赛数量（通过leaderboard间接获取，或直接查数据库）
     wx.cloud.callFunction({
-      name: 'getLeaderboard',
-      data: { offset: 0, limit: 1 }
+      name: 'manageMatch',
+      data: { action: 'count' }
     }).then(res => {
-      // 使用辩手数据中的matchCount来估算
+      if (res.result.success) {
+        this.setData({ 'stats.matchCount': res.result.count })
+      }
     })
   },
 
   goMatchForm() {
     wx.navigateTo({ url: '/pages/admin/match-form/match-form' })
+  },
+
+  goMatchManage() {
+    wx.navigateTo({ url: '/pages/admin/match-manage/match-manage' })
   },
 
   goDebaterManage() {

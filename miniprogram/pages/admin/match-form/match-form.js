@@ -11,6 +11,7 @@ Page({
     matchWeight: 1,
     matchDate: '',
     matchRound: 1,
+    matchStage: '初赛',
 
     // 步骤2数据
     allDebaters: [],
@@ -60,6 +61,10 @@ Page({
   onRoundChange(e) {
     const round = e.currentTarget.dataset.round
     this.setData({ matchRound: round })
+  },
+  onStageChange(e) {
+    const stage = e.currentTarget.dataset.stage
+    this.setData({ matchStage: stage })
   },
 
   // 步骤2选人
@@ -134,6 +139,7 @@ Page({
     const matchData = {
       name: this.data.matchName.trim(),
       level: this.data.matchLevel,
+      stage: this.data.matchStage,
       date: this.data.matchDate,
       totalRounds: round,
       participants: this.data.participants.map(p => ({

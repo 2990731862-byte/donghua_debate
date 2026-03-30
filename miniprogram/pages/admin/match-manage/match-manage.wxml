@@ -1,0 +1,78 @@
+<view class="container">
+  <!-- 搜索 -->
+  <view class="filter-bar">
+    <input class="filter-input" placeholder="按比赛名称搜索" value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="doSearch" />
+  </view>
+
+  <!-- Tab: 比赛记录 -->
+  <view wx:if="{{activeTab === 'records'}}">
+    <view wx:for="{{groupedMatches}}" wx:key="name" class="match-group card">
+      <view class="group-header" bindtap="toggleGroup" data-name="{{item.name}}">
+        <view class="group-info">
+          <text class="group-name">{{item.name}}</text>
+          <text class="group-meta">
+            <text class="tag tag-level-{{item.level === '院赛' ? 'college' : item.level === '校赛' ? 'university' : 'city'}}">{{item.level}}</text>
+            <text wx:if="{{item.stage}}" class="tag tag-stage">{{item.stage}}</text>
+            <text class="meta-text">{{item.rounds.length}}轮 · {{item.count}}条记录</text>
+          </text>
+        </view>
+        <text class="group-arrow">{{expandedGroups[item.name] ? '收起' : '展开'}}</text>
+      </view>
+
+      <view class="group-matches" wx:if="{{expandedGroups[item.name]}}">
+        <view class="round-block" wx:for="{{item.matches}}" wx:for-item="m" wx:key="_id">
+          <view class="round-header">
+            <text class="round-title">第{{m.totalRounds}}轮</text>
+            <text class="round-date">{{m.date}}</text>
+            <view class="round-del" bindtap="deleteMatch" data-id="{{m._id}}" data-name="{{item.name}}">删除整轮</view>
+          </view>
+          <view class="participant-row" wx:for="{{m.participants}}" wx:for-item="p" wx:key="debaterId">
+            <text class="p-name">{{p.debaterName}}</text>
+            <text class="p-badge p-best" wx:if="{{p._isBest}}">佳辩</text>
+            <text class="p-badge p-top3" wx:if="{{p.topThreeFinish}}">前三</text>
+            <text class="p-score">+{{p.scoreBreakdown.matchTotal}}</text>
+            <view class="p-del" catchtap="deleteParticipant" data-matchid="{{m._id}}" data-debaterid="{{p.debaterId}}" data-debatername="{{p.debaterName}}" data-matchname="{{item.name}}">x</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab: 积分明细 -->
+  <view wx:else>
+    <view class="sort-bar">
+      <view class="sort-btn {{sortMode === 'time' ? 'active' : ''}}" bindtap="switchSort" data-mode="time">按时间</view>
+      <view class="sort-btn {{sortMode === 'name' ? 'active' : ''}}" bindtap="switchSort" data-mode="name">按辩手</view>
+    </view>
+    <view class="detail-card card" wx:for="{{detailRecords}}" wx:key="matchId+debaterId">
+      <view class="detail-main">
+        <text class="detail-name">{{item.debaterName}}</text>
+        <text class="detail-match">{{item.matchName}}</text>
+        <view class="detail-tags">
+          <text class="tag tag-level-{{item.matchLevel === '院赛' ? 'college' : item.matchLevel === '校赛' ? 'university' : 'city'}}">{{item.matchLevel}}</text>
+          <text wx:if="{{item.matchStage}}" class="tag tag-stage">{{item.matchStage}}</text>
+          <text class="tag tag-round">第{{item.round}}轮</text>
+          <text class="tag tag-best" wx:if="{{item.isBestDebater}}">佳辩</text>
+          <text class="tag tag-top3" wx:if="{{item.isTopThree}}">前三</text>
+        </view>
+        <text class="detail-date">{{item.matchDate}}</text>
+      </view>
+      <view class="detail-right">
+        <text class="detail-score">+{{item.score}}</text>
+        <view class="detail-del" catchtap="deleteParticipant" data-matchid="{{item.matchId}}" data-debaterid="{{item.debaterId}}" data-debatername="{{item.debaterName}}" data-matchname="{{item.matchName}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && (activeTab === 'records' ? groupedMatches.length === 0 : detailRecords.length === 0)}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">暂无记录</text>
+  </view>
+
+  <!-- 底部Tab -->
+  <view class="bottom-bar">
+    <view class="switch-btn {{activeTab === 'records' ? 'active' : ''}}" bindtap="switchTab" data-tab="records">比赛记录</view>
+    <view class="switch-btn {{activeTab === 'details' ? 'active' : ''}}" bindtap="switchTab" data-tab="details">积分明细</view>
+  </view>
+</view>

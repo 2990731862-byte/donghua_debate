@@ -7,6 +7,7 @@
     "pages/debater/debater",
     "pages/admin/dashboard/dashboard",
     "pages/admin/match-form/match-form",
+    "pages/admin/match-manage/match-manage",
     "pages/admin/debater-manage/debater-manage",
     "pages/admin/invite/invite"
   ],
