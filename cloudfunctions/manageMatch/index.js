@@ -52,15 +52,14 @@ exports.main = async (event) => {
     // 删除比赛记录
     await db.collection('matches').doc(matchId).remove()
 
-    // 更新排名
-    const allDebaters = await db.collection('debaters')
-      .orderBy('totalScore', 'desc')
-      .limit(100)
-      .get()
-    for (let i = 0; i < allDebaters.data.length; i++) {
-      await db.collection('debaters').doc(allDebaters.data[i]._id).update({
-        data: { rank: i + 1 }
+    // 删除后自动重算积分（确保 personalRecords 一致）
+    try {
+      await cloud.callFunction({
+        name: 'recalculateScores',
+        data: { internal: true }
       })
+    } catch (e) {
+      console.error('自动重算失败', e)
     }
 
     return { success: true, message: '已删除' }
@@ -105,14 +104,14 @@ exports.main = async (event) => {
       })
     }
 
-    const allDebaters = await db.collection('debaters')
-      .orderBy('totalScore', 'desc')
-      .limit(100)
-      .get()
-    for (let i = 0; i < allDebaters.data.length; i++) {
-      await db.collection('debaters').doc(allDebaters.data[i]._id).update({
-        data: { rank: i + 1 }
+    // 删除后自动重算积分
+    try {
+      await cloud.callFunction({
+        name: 'recalculateScores',
+        data: { internal: true }
       })
+    } catch (e) {
+      console.error('自动重算失败', e)
     }
 
     return { success: true, message: '已删除该参赛者记录' }

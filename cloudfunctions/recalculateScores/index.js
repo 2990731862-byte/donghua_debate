@@ -44,7 +44,11 @@ function calculateParticipantScore(participant, W, personalRecords) {
     if (isTopThree && !hadTopThree) hadTopThree = true
 
     totalScore += baseReward + recordBonus
-    roundDetails.push({ round: roundNum, baseReward, recordBonus, roundScore: baseReward + recordBonus })
+    roundDetails.push({
+      round: roundNum, baseReward, recordBonus, roundScore: baseReward + recordBonus,
+      isBestDebater, isTopThree,
+      isRecordBreakingRound, isRecordBreakingBestDebater, isRecordBreakingTopThree
+    })
   }
 
   return {
@@ -61,12 +65,14 @@ function calculateParticipantScore(participant, W, personalRecords) {
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
 
-  // 验证管理员权限
-  const adminResult = await db.collection('admins')
-    .where({ openid: OPENID })
-    .get()
-  if (adminResult.data.length === 0) {
-    return { success: false, message: '无权限' }
+  // 验证权限：内部调用（如 manageMatch 删除后自动触发）跳过验证
+  if (!event.internal) {
+    const adminResult = await db.collection('admins')
+      .where({ openid: OPENID })
+      .get()
+    if (adminResult.data.length === 0) {
+      return { success: false, message: '无权限' }
+    }
   }
 
   // 获取所有辩手，重置积分

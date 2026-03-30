@@ -123,8 +123,8 @@ Page({
       if (rd.recordBonus > 0) {
         var parts = []
         if (rd.isRecordBreakingRound) {
-          var rbRound = (0.5 * Math.log2(Math.max(1, W)) + 0.5 * Math.floor(0.5 * rd.round)).toFixed(1)
-          parts.push('轮次+' + rbRound)
+          var rbRound = 0.5 * Math.log2(Math.max(1, W)) + 0.5 * Math.floor(0.5 * rd.round)
+          if (rbRound > 0) parts.push('轮次+' + rbRound.toFixed(1))
         }
         if (rd.isRecordBreakingBestDebater) {
           parts.push('佳辩+' + (0.5 * W).toFixed(1))

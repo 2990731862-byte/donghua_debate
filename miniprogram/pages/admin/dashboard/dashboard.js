@@ -11,13 +11,21 @@ Page({
   },
 
   onLoad() {
-    adminGuard().then(allowed => {
-      if (allowed) {
-        this.setData({ authorized: true })
-        this.loadRole()
-        this.loadStats()
-      }
-    })
+    const app = getApp()
+    // 有缓存就直接用，不等 adminGuard
+    if (app.globalData.openid && app.globalData.isAdmin) {
+      this.setData({ authorized: true })
+      this.loadRole()
+      this.loadStats()
+    } else {
+      adminGuard().then(allowed => {
+        if (allowed) {
+          this.setData({ authorized: true })
+          this.loadRole()
+          this.loadStats()
+        }
+      })
+    }
   },
 
   onShow() {
