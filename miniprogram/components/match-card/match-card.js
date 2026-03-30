@@ -29,8 +29,8 @@ Component({
   },
 
   observers: {
-    'match.weight, scoreBreakdown': function () {
-      var sb = this.data.scoreBreakdown
+    'match.weight, match.scoreBreakdown': function () {
+      var sb = this.data.match.scoreBreakdown
       if (!sb || !sb.roundDetails) {
         this.setData({ breakdownLines: [] })
         return
@@ -67,7 +67,7 @@ Component({
           }
         }
 
-        item.lines.push('本轮合计 +' + rd.roundScore.toFixed(1))
+        item.totalLine = '本轮合计 +' + rd.roundScore.toFixed(1)
         return item
       })
 

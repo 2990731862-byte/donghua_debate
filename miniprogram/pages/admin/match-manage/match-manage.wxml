@@ -63,9 +63,10 @@
         <view class="detail-del" catchtap="deleteParticipant" data-matchid="{{item.matchId}}" data-debaterid="{{item.debaterId}}" data-debatername="{{item.debaterName}}" data-matchname="{{item.matchName}}">删除</view>
       </view>
       <view class="detail-breakdown" wx:if="{{expandedDetails[index] && item.breakdownLines.length > 0}}">
-        <view class="bd-round" wx:for="{{item.breakdownLines}}" wx:for-item="rd" wx:key="round">
+        <view class="bd-round" wx:for="{{item.breakdownLines}}" wx:for-item="rd" wx:for-index="ri" wx:key="round">
           <text class="bd-title">第{{rd.round}}轮</text>
-          <text class="bd-line" wx:for="{{rd.lines}}" wx:key="*this">{{item}}</text>
+          <text class="bd-line" wx:for="{{rd.lines}}" wx:for-item="line" wx:key="*this">{{line}}</text>
+          <text class="bd-line bd-total">{{rd.totalLine}}</text>
         </view>
       </view>
     </view>

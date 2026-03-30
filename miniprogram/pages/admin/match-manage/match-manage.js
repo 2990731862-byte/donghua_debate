@@ -136,7 +136,7 @@ Page({
           item.lines.push('破纪录奖励 ' + parts.join(' '))
         }
       }
-      item.lines.push('本轮合计 +' + rd.roundScore.toFixed(1))
+      item.totalLine = '本轮合计 +' + rd.roundScore.toFixed(1)
       return item
     })
   },

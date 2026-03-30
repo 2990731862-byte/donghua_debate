@@ -24,6 +24,7 @@
       <view class="breakdown-round" wx:for="{{breakdownLines}}" wx:key="round">
         <text class="bd-title">第{{item.round}}轮</text>
         <text class="bd-line" wx:for="{{item.lines}}" wx:for-item="line" wx:key="*this">{{line}}</text>
+        <text class="bd-line bd-total">{{item.totalLine}}</text>
       </view>
     </view>
     <view class="participants-summary" wx:if="{{match.participants}}">

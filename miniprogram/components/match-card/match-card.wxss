@@ -136,6 +136,14 @@
   line-height: 1.5;
 }
 
+.bd-total {
+  color: #1890FF;
+  font-weight: 500;
+  margin-top: 6rpx;
+  padding-top: 4rpx;
+  border-top: 1rpx dashed #E8E8E8;
+}
+
 .participants-summary {
   margin-top: 16rpx;
   padding-top: 16rpx;
