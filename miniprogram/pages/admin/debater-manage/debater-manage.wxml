@@ -29,8 +29,8 @@
   </view>
 
   <!-- 添加/编辑弹窗 -->
-  <view class="modal-mask" wx:if="{{showForm}}" bindtap="hideForm">
-    <view class="modal-content card" catchtap="">
+  <view class="modal-mask" wx:if="{{showForm}}" bindtap="hideForm" catchtouchmove="preventTouchMove">
+    <view class="modal-content card" catchtap="doNothing">
       <text class="modal-title">{{editingId ? '编辑辩手' : '添加辩手'}}</text>
 
       <view class="form-group">

@@ -6,9 +6,7 @@ App({
     }
 
     wx.cloud.init({
-      // env 参数说明：
-      // 填入云开发环境ID，可在云控制台获取
-      // 如不填则使用默认环境（第一个创建的环境）
+      env: 'cloudbase-0gktihne4d765c16',
       traceUser: true,
     })
 
@@ -22,6 +20,7 @@ App({
     wx.cloud.callFunction({
       name: 'login',
       success: res => {
+        console.log('openid:', res.result.openid, 'isAdmin:', res.result.isAdmin)
         this.globalData.openid = res.result.openid
         this.globalData.isAdmin = res.result.isAdmin
         this.globalData.adminRole = res.result.adminRole

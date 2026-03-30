@@ -57,6 +57,9 @@ Page({
     this.setData({ showForm: false })
   },
 
+  doNothing() {},
+  preventTouchMove() {},
+
   onNameInput(e) { this.setData({ formName: e.detail.value }) },
   onCollegeInput(e) { this.setData({ formCollege: e.detail.value }) },
   onGradeInput(e) { this.setData({ formGrade: e.detail.value }) },
