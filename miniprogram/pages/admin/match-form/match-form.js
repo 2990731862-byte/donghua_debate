@@ -10,7 +10,7 @@ Page({
     matchLevel: '院赛',
     matchWeight: 1,
     matchDate: '',
-    matchTotalRounds: 3,
+    matchRound: 1,
 
     // 步骤2数据
     allDebaters: [],
@@ -18,7 +18,6 @@ Page({
 
     // 步骤3数据
     participants: [],
-    roundOptions: [],
 
     // 提交状态
     submitting: false
@@ -58,9 +57,9 @@ Page({
     })
   },
   onDateChange(e) { this.setData({ matchDate: e.detail.value }) },
-  onTotalRoundsChange(e) {
-    const rounds = e.currentTarget.dataset.rounds
-    this.setData({ matchTotalRounds: rounds })
+  onRoundChange(e) {
+    const round = e.currentTarget.dataset.round
+    this.setData({ matchRound: round })
   },
 
   // 步骤2选人
@@ -77,39 +76,10 @@ Page({
   },
 
   // 步骤3操作
-  toggleRound(e) {
-    const { pindex, round } = e.currentTarget.dataset
-    const participant = this.data.participants[pindex]
-    const rounds = [...participant.roundsParticipated]
-    const idx = rounds.indexOf(round)
-    if (idx === -1) {
-      rounds.push(round)
-      rounds.sort((a, b) => a - b)
-    } else {
-      rounds.splice(idx, 1)
-      // 同时移除该轮的佳辩
-      const bestRounds = participant.bestDebaterRounds.filter(r => r !== round)
-      this.setData({
-        [`participants[${pindex}].bestDebaterRounds`]: bestRounds
-      })
-    }
-    this.setData({
-      [`participants[${pindex}].roundsParticipated`]: rounds
-    })
-  },
-
   toggleBestDebater(e) {
-    const { pindex, round } = e.currentTarget.dataset
-    const participant = this.data.participants[pindex]
-    const bestRounds = [...participant.bestDebaterRounds]
-    const idx = bestRounds.indexOf(round)
-    if (idx === -1) {
-      bestRounds.push(round)
-    } else {
-      bestRounds.splice(idx, 1)
-    }
+    const pindex = e.currentTarget.dataset.pindex
     this.setData({
-      [`participants[${pindex}].bestDebaterRounds`]: bestRounds
+      [`participants[${pindex}].isBestDebater`]: !this.data.participants[pindex].isBestDebater
     })
   },
 
@@ -139,28 +109,13 @@ Page({
       if (selected.length === 0) {
         wx.showToast({ title: '请至少选择一位辩手', icon: 'none' }); return
       }
-      // 构建参赛者列表
       const participants = selected.map(d => ({
         debaterId: d._id,
         debaterName: d.name,
-        roundsParticipated: [],
-        bestDebaterRounds: [],
+        isBestDebater: false,
         topThreeFinish: false
       }))
-      // 生成轮次选项
-      const roundOptions = []
-      for (let i = 1; i <= this.data.matchTotalRounds; i++) {
-        roundOptions.push(i)
-      }
-      this.setData({ participants, roundOptions })
-    }
-
-    if (step === 3) {
-      // 验证每个参赛者至少选了一个轮次
-      const invalid = this.data.participants.find(p => p.roundsParticipated.length === 0)
-      if (invalid) {
-        wx.showToast({ title: `请为${invalid.debaterName}选择参加轮次`, icon: 'none' }); return
-      }
+      this.setData({ participants })
     }
 
     this.setData({ step: step + 1 })
@@ -175,15 +130,16 @@ Page({
     this.setData({ submitting: true })
     wx.showLoading({ title: '提交中...' })
 
+    const round = this.data.matchRound
     const matchData = {
       name: this.data.matchName.trim(),
       level: this.data.matchLevel,
       date: this.data.matchDate,
-      totalRounds: this.data.matchTotalRounds,
+      totalRounds: round,
       participants: this.data.participants.map(p => ({
         debaterId: p.debaterId,
-        roundsParticipated: p.roundsParticipated,
-        bestDebaterRounds: p.bestDebaterRounds,
+        roundsParticipated: [round],
+        bestDebaterRounds: p.isBestDebater ? [round] : [],
         topThreeFinish: p.topThreeFinish
       }))
     }

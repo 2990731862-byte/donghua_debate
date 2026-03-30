@@ -68,16 +68,16 @@
     </view>
 
     <view class="form-group">
-      <text class="form-label">总轮次数</text>
+      <text class="form-label">轮次</text>
       <view class="round-picker">
         <view
-          class="round-option {{matchTotalRounds === item ? 'active' : ''}}"
+          class="round-option {{matchRound === item ? 'active' : ''}}"
           wx:for="{{[1,2,3,4,5]}}"
           wx:key="*this"
-          bindtap="onTotalRoundsChange"
-          data-rounds="{{item}}"
+          bindtap="onRoundChange"
+          data-round="{{item}}"
         >
-          <text>{{item}}</text>
+          <text>第{{item}}轮</text>
         </view>
       </view>
     </view>
@@ -122,39 +122,11 @@
       <text class="participant-name">{{item.debaterName}}</text>
 
       <view class="form-group">
-        <text class="form-label">参加的轮次（点击选择）</text>
-        <view class="round-picker">
-          <view
-            class="round-option {{item.roundsParticipated.indexOf(r) !== -1 ? 'active' : ''}}"
-            wx:for="{{roundOptions}}"
-            wx:for-item="r"
-            wx:for-index="rIdx"
-            wx:key="*this"
-            bindtap="toggleRound"
-            data-pindex="{{index}}"
-            data-round="{{r}}"
-          >
-            <text>第{{r}}轮</text>
+        <view class="checkbox-row" bindtap="toggleBestDebater" data-pindex="{{index}}">
+          <view class="checkbox {{item.isBestDebater ? 'checked' : ''}}">
+            <text wx:if="{{item.isBestDebater}}">✓</text>
           </view>
-        </view>
-      </view>
-
-      <view class="form-group">
-        <text class="form-label">最佳辩手轮次（若有）</text>
-        <view class="round-picker">
-          <view
-            class="round-option best {{item.bestDebaterRounds.indexOf(r) !== -1 ? 'active' : ''}}"
-            wx:for="{{item.roundsParticipated}}"
-            wx:for-item="r"
-            wx:for-index="rIdx"
-            wx:key="*this"
-            bindtap="toggleBestDebater"
-            data-pindex="{{index}}"
-            data-round="{{r}}"
-          >
-            <text>第{{r}}轮</text>
-          </view>
-          <text class="hint-text" wx:if="{{item.roundsParticipated.length === 0}}">请先选择参加轮次</text>
+          <text class="checkbox-label">最佳辩手</text>
         </view>
       </view>
 
@@ -192,8 +164,8 @@
         <text class="confirm-value">{{matchDate}}</text>
       </view>
       <view class="confirm-row">
-        <text class="confirm-label">总轮次</text>
-        <text class="confirm-value">{{matchTotalRounds}}轮</text>
+        <text class="confirm-label">轮次</text>
+        <text class="confirm-value">第{{matchRound}}轮</text>
       </view>
       <view class="confirm-row">
         <text class="confirm-label">参赛人数</text>
@@ -205,8 +177,7 @@
       <text class="form-label">参赛者详情</text>
       <view class="confirm-participant" wx:for="{{participants}}" wx:key="debaterId">
         <text class="cp-name">{{item.debaterName}}</text>
-        <text class="cp-detail">轮次: {{item.roundsParticipated.join(', ')}}</text>
-        <text class="cp-detail" wx:if="{{item.bestDebaterRounds.length > 0}}">佳辩: 第{{item.bestDebaterRounds.join(', ')}}轮</text>
+        <text class="cp-detail" wx:if="{{item.isBestDebater}}">佳辩</text>
         <text class="cp-detail cp-top3" wx:if="{{item.topThreeFinish}}">🏆 前三名</text>
       </view>
     </view>
