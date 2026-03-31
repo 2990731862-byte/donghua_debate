@@ -17,6 +17,21 @@
   margin-bottom: 24rpx;
 }
 
+.active-code-display {
+  text-align: center;
+  padding: 32rpx;
+  background: #F6FFED;
+  border-radius: 12rpx;
+  border: 1rpx solid #B7EB8F;
+}
+
+.code-expire {
+  display: block;
+  font-size: 22rpx;
+  color: #52C41A;
+  margin: 12rpx 0 20rpx;
+}
+
 .new-code-display {
   text-align: center;
   padding: 32rpx;

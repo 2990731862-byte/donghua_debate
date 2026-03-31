@@ -103,7 +103,7 @@ Page({
     const { id, name } = e.currentTarget.dataset
     wx.showModal({
       title: '确认删除',
-      content: `确定删除辩手"${name}"？此操作不可撤销。`,
+      content: `确定删除辩手"${name}"？该辩手的比赛记录将一并清除，此操作不可撤销。`,
       success: (res) => {
         if (res.confirm) {
           wx.showLoading({ title: '删除中...' })

@@ -58,8 +58,48 @@ exports.main = async (event) => {
     const { id } = data
     if (!id) return { success: false, message: '缺少辩手ID' }
 
+    // 查找该辩手参与的所有比赛
+    const matchResult = await db.collection('matches')
+      .where({ 'participants.debaterId': id })
+      .limit(100)
+      .get()
+
+    let cleanedMatches = 0
+    let removedMatches = 0
+
+    for (const match of matchResult.data) {
+      const newParticipants = match.participants.filter(p => p.debaterId !== id)
+
+      if (newParticipants.length === 0) {
+        // 没有参赛者了，删除整场比赛
+        await db.collection('matches').doc(match._id).remove()
+        removedMatches++
+      } else {
+        // 移除该辩手的参赛记录
+        await db.collection('matches').doc(match._id).update({
+          data: { participants: newParticipants }
+        })
+        cleanedMatches++
+      }
+    }
+
+    // 删除辩手记录
     await db.collection('debaters').doc(id).remove()
-    return { success: true }
+
+    // 重算所有积分确保数据一致
+    try {
+      await cloud.callFunction({
+        name: 'recalculateScores',
+        data: { internal: true }
+      })
+    } catch (e) {
+      console.error('自动重算失败', e)
+    }
+
+    return {
+      success: true,
+      message: `已删除辩手，清理了 ${cleanedMatches} 场比赛记录，删除了 ${removedMatches} 场空比赛`
+    }
   }
 
   if (action === 'list') {

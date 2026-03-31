@@ -28,6 +28,34 @@ exports.main = async (event) => {
   }
 
   if (action === 'generate') {
+    // 检查是否已有有效的邀请码（未使用且未过期）
+    const now = new Date()
+    const existing = await db.collection('invite_codes')
+      .where({
+        createdBy: OPENID,
+        used: false,
+        expiresAt: db.command.gt(now)
+      })
+      .get()
+
+    if (existing.data.length > 0) {
+      const active = existing.data[0]
+      return {
+        success: false,
+        message: '当前已有有效邀请码，请等待过期后再申请',
+        existingCode: active.code,
+        expiresAt: active.expiresAt
+      }
+    }
+
+    // 自动清理已过期的邀请码
+    await db.collection('invite_codes')
+      .where({
+        createdBy: OPENID,
+        expiresAt: db.command.lte(now)
+      })
+      .remove()
+
     // 生成邀请码，7天有效
     const code = generateCode()
     const expiresAt = new Date()
@@ -49,6 +77,15 @@ exports.main = async (event) => {
   }
 
   if (action === 'list') {
+    // 自动清理已过期的邀请码
+    const now = new Date()
+    await db.collection('invite_codes')
+      .where({
+        createdBy: OPENID,
+        expiresAt: db.command.lte(now)
+      })
+      .remove()
+
     // 列出所有邀请码
     const codes = await db.collection('invite_codes')
       .where({ createdBy: OPENID })

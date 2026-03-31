@@ -3,13 +3,19 @@ const { adminGuard } = require('../../../utils/auth')
 Page({
   data: {
     codes: [],
-    newCode: ''
+    newCode: '',
+    hasActiveCode: false,
+    activeCodeInfo: null
   },
 
   onLoad() {
     adminGuard().then(allowed => {
       if (allowed) this.loadCodes()
     })
+  },
+
+  onShow() {
+    if (this.data.authorized) this.loadCodes()
   },
 
   loadCodes() {
@@ -22,14 +28,27 @@ Page({
         const codes = res.result.data.map(c => ({
           ...c,
           expired: !c.used && new Date(c.expiresAt) < now,
-          createdAtStr: this.formatDate(c.createdAt)
+          createdAtStr: this.formatDate(c.createdAt),
+          expiresAtStr: this.formatDate(c.expiresAt)
         }))
-        this.setData({ codes })
+        // 检查是否有有效邀请码
+        const activeCode = codes.find(c => !c.used && !c.expired)
+        this.setData({
+          codes,
+          authorized: true,
+          hasActiveCode: !!activeCode,
+          activeCodeInfo: activeCode || null,
+          newCode: activeCode ? activeCode.code : this.data.newCode
+        })
       }
     })
   },
 
   generateCode() {
+    if (this.data.hasActiveCode) {
+      wx.showToast({ title: '当前已有有效邀请码', icon: 'none' })
+      return
+    }
     wx.showLoading({ title: '生成中...' })
     wx.cloud.callFunction({
       name: 'inviteAdmin',
@@ -48,9 +67,10 @@ Page({
     })
   },
 
-  copyCode() {
+  copyCode(e) {
+    const code = e.currentTarget.dataset.code || this.data.newCode
     wx.setClipboardData({
-      data: this.data.newCode,
+      data: code,
       success: () => {
         wx.showToast({ title: '已复制', icon: 'success' })
       }

@@ -30,7 +30,7 @@ Page({
         // 设置默认日期为今天
         const today = new Date()
         const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-        this.setData({ matchDate: dateStr })
+        this.setData({ matchDate: dateStr, maxDate: dateStr })
         this.loadDebaters()
       }
     })

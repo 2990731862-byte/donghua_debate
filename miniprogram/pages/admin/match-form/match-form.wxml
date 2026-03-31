@@ -60,7 +60,7 @@
 
     <view class="form-group">
       <text class="form-label">比赛日期</text>
-      <picker mode="date" value="{{matchDate}}" bindchange="onDateChange">
+      <picker mode="date" value="{{matchDate}}" end="{{maxDate}}" bindchange="onDateChange">
         <view class="form-input picker-input">
           <text>{{matchDate || '请选择日期'}}</text>
         </view>
