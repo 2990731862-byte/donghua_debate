@@ -4,12 +4,15 @@ const db = cloud.database()
 
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
-  const { action, inviteCode } = event
+  const { action, inviteCode, usedByName } = event
 
   // 兑换邀请码
   if (action === 'redeem') {
     if (!inviteCode) {
       return { success: false, message: '请输入邀请码' }
+    }
+    if (!usedByName) {
+      return { success: false, message: '请输入姓名' }
     }
 
     // 检查是否已是管理员
@@ -41,26 +44,36 @@ exports.main = async (event) => {
       data: {
         used: true,
         usedBy: OPENID,
+        usedByName: usedByName,
         usedAt: new Date()
       }
     })
 
-    // 添加为管理员
+    // 添加为管理员（7天有效期）
+    const expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + 7)
+
     await db.collection('admins').add({
       data: {
         openid: OPENID,
         role: codeDoc.role || 'admin',
         invitedBy: codeDoc.createdBy,
-        createdAt: new Date()
+        createdAt: new Date(),
+        expiresAt
       }
     })
 
-    return { success: true, message: '授权成功', role: codeDoc.role || 'admin' }
+    return { success: true, message: '授权成功', role: codeDoc.role || 'admin', expiresAt }
   }
 
-  // 默认：检查是否为管理员
+  // 默认：检查是否为管理员（超级管理员永不过期，普通管理员需在有效期内）
+  const _ = db.command
+  const now = new Date()
   const adminResult = await db.collection('admins')
-    .where({ openid: OPENID })
+    .where(_.or([
+      { openid: OPENID, role: 'super_admin' },
+      { openid: OPENID, expiresAt: _.gt(now) }
+    ]))
     .get()
 
   return {

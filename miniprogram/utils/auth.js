@@ -34,12 +34,13 @@ function checkAdminStatus() {
  * @param {string} code - 邀请码
  * @returns {Promise<Object>}
  */
-function redeemInviteCode(code) {
+function redeemInviteCode(code, name) {
   return wx.cloud.callFunction({
     name: 'checkAdmin',
     data: {
       action: 'redeem',
-      inviteCode: code
+      inviteCode: code,
+      usedByName: name
     }
   }).then(res => {
     if (res.result.success) {

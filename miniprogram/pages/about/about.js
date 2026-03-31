@@ -20,30 +20,46 @@ Page({
           url: '/pages/admin/dashboard/dashboard'
         })
       } else {
-        // 非管理员显示邀请码输入弹窗
-        wx.showModal({
-          title: '管理员入口',
-          content: '请输入邀请码以获取管理权限',
-          editable: true,
-          placeholderText: '输入邀请码',
-          success: (res) => {
-            if (res.confirm && res.content) {
-              this.redeemCode(res.content.trim())
-            }
-          }
-        })
+        this.setData({ showCodeModal: true, inputCode: '', inputName: '' })
       }
     })
   },
 
-  redeemCode(code) {
+  cancelCodeModal() {
+    this.setData({ showCodeModal: false, inputCode: '', inputName: '' })
+  },
+
+  onCodeInput(e) {
+    this.setData({ inputCode: e.detail.value })
+  },
+
+  onNameInput(e) {
+    this.setData({ inputName: e.detail.value })
+  },
+
+  confirmCode() {
+    const code = this.data.inputCode.trim()
+    const name = this.data.inputName.trim()
+    if (!code) {
+      wx.showToast({ title: '请输入邀请码', icon: 'none' })
+      return
+    }
+    if (!name) {
+      wx.showToast({ title: '请输入姓名', icon: 'none' })
+      return
+    }
+    this.redeemCode(code, name)
+  },
+
+  redeemCode(code, name) {
     wx.showLoading({ title: '验证中...' })
     const { redeemInviteCode } = require('../../utils/auth')
 
-    redeemInviteCode(code).then(result => {
+    redeemInviteCode(code, name).then(result => {
       wx.hideLoading()
       if (result.success) {
-        wx.showToast({ title: '授权成功', icon: 'success' })
+        this.setData({ showCodeModal: false, inputCode: '' })
+        wx.showToast({ title: '授权成功（有效期7天）', icon: 'success' })
         setTimeout(() => {
           wx.navigateTo({
             url: '/pages/admin/dashboard/dashboard'
@@ -54,6 +70,7 @@ Page({
       }
     }).catch(() => {
       wx.hideLoading()
+      this.setData({ showCodeModal: false })
       wx.showToast({ title: '验证失败', icon: 'none' })
     })
   }

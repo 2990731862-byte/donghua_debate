@@ -1,33 +1,11 @@
 <view class="container">
-  <!-- 当前有效邀请码 -->
-  <view class="card active-card fade-in" wx:if="{{hasActiveCode && activeCodeInfo}}">
-    <text class="section-title">当前有效邀请码</text>
-    <text class="hint">邀请码有效期为7天，请复制并发送给新管理员</text>
-    <view class="active-code-display">
-      <text class="code-value">{{activeCodeInfo.code}}</text>
-      <text class="code-expire">有效期至：{{activeCodeInfo.expiresAtStr}}</text>
-      <view class="btn-secondary copy-btn" bindtap="copyCode" data-code="{{activeCodeInfo.code}}">
-        复制邀请码
-      </view>
-    </view>
-  </view>
-
   <!-- 生成邀请码 -->
-  <view class="card generate-card fade-in" wx:if="{{!hasActiveCode}}">
-    <text class="section-title">生成邀请码</text>
-    <text class="hint">邀请码有效期为7天，可用于授权新管理员</text>
-    <view class="btn-primary generate-btn" bindtap="generateCode">
-      生成新邀请码
+  <view class="card fade-in">
+    <view class="generate-row">
+      <text class="section-title">生成邀请码</text>
+      <view class="btn-primary generate-btn" bindtap="generateCode">生成新邀请码</view>
     </view>
-
-    <!-- 显示刚生成的邀请码 -->
-    <view class="new-code-display" wx:if="{{newCode}}">
-      <text class="code-value">{{newCode}}</text>
-      <text class="code-hint">请复制并发送给新管理员</text>
-      <view class="btn-secondary copy-btn" bindtap="copyCode">
-        复制邀请码
-      </view>
-    </view>
+    <text class="hint">每个邀请码有效期为7天，被使用后自动失效</text>
   </view>
 
   <!-- 邀请码列表 -->
@@ -36,14 +14,26 @@
 
     <view class="code-list">
       <view class="code-item" wx:for="{{codes}}" wx:key="_id">
-        <view class="code-info">
-          <text class="code-text">{{item.code}}</text>
-          <text class="code-status {{item.used ? 'used' : (item.expired ? 'expired' : 'active')}}">
-            {{item.used ? '已使用' : (item.expired ? '已过期' : '有效')}}
-          </text>
+        <view class="code-main">
+          <text class="code-text {{item.statusClass}}">{{item.code}}</text>
+          <text class="code-status {{item.statusClass}}">{{item.status}}</text>
         </view>
-        <text class="code-date">{{item.createdAtStr}}</text>
+        <text class="code-date">有效期至：{{item.expiresAtStr}}</text>
+        <text class="code-user" wx:if="{{item.used && item.usedByName}}">使用者：{{item.usedByName}}</text>
+        <view class="code-actions">
+          <view class="action-btn copy-action" bindtap="copyCode" data-code="{{item.code}}">
+            <text>复制</text>
+          </view>
+          <view class="action-btn delete-action" bindtap="deleteCode" data-id="{{item._id}}" data-code="{{item.code}}" data-status="{{item.status}}">
+            <text>删除</text>
+          </view>
+        </view>
       </view>
     </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{codes.length === 0}}">
+    <text class="empty-text">暂无邀请码记录</text>
   </view>
 </view>

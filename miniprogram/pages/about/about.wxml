@@ -78,6 +78,20 @@
     <text class="rule-text">信息包括：比赛名称、时间、对手、赛果、上场队员、最佳辩手、获奖名次等。</text>
   </view>
 
+  <!-- 邀请码弹窗 -->
+  <view class="modal-mask" wx:if="{{showCodeModal}}" bindtap="cancelCodeModal">
+    <view class="modal-dialog" catchtap="">
+      <view class="modal-title">管理员入口</view>
+      <view class="modal-body">请输入邀请码和你的姓名以获取管理权限（有效期7天）</view>
+      <input class="modal-input" placeholder="输入邀请码" placeholder-class="modal-placeholder" value="{{inputCode}}" bindinput="onCodeInput" maxlength="10" />
+      <input class="modal-input" placeholder="输入你的姓名" placeholder-class="modal-placeholder" value="{{inputName}}" bindinput="onNameInput" maxlength="20" />
+      <view class="modal-btns">
+        <view class="modal-btn cancel" bindtap="cancelCodeModal">取消</view>
+        <view class="modal-btn confirm" bindtap="confirmCode">确定</view>
+      </view>
+    </view>
+  </view>
+
   <!-- 版权信息 -->
   <view class="footer">
     <text class="footer-text">东华大学辩论协会</text>

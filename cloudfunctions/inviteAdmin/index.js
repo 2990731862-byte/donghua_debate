@@ -16,7 +16,7 @@ function generateCode() {
 
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
-  const { action, role = 'admin' } = event
+  const { action, role = 'admin', id } = event
 
   // 验证是否为超级管理员
   const adminResult = await db.collection('admins')
@@ -24,39 +24,11 @@ exports.main = async (event) => {
     .get()
 
   if (adminResult.data.length === 0) {
-    return { success: false, message: '仅超级管理员可以邀请' }
+    return { success: false, message: '仅超级管理员可以操作' }
   }
 
   if (action === 'generate') {
-    // 检查是否已有有效的邀请码（未使用且未过期）
-    const now = new Date()
-    const existing = await db.collection('invite_codes')
-      .where({
-        createdBy: OPENID,
-        used: false,
-        expiresAt: db.command.gt(now)
-      })
-      .get()
-
-    if (existing.data.length > 0) {
-      const active = existing.data[0]
-      return {
-        success: false,
-        message: '当前已有有效邀请码，请等待过期后再申请',
-        existingCode: active.code,
-        expiresAt: active.expiresAt
-      }
-    }
-
-    // 自动清理已过期的邀请码
-    await db.collection('invite_codes')
-      .where({
-        createdBy: OPENID,
-        expiresAt: db.command.lte(now)
-      })
-      .remove()
-
-    // 生成邀请码，7天有效
+    // 生成邀请码，7天有效（允许多个同时存在）
     const code = generateCode()
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7)
@@ -68,6 +40,7 @@ exports.main = async (event) => {
         role,
         used: false,
         usedBy: null,
+        usedAt: null,
         expiresAt,
         createdAt: new Date()
       }
@@ -77,23 +50,22 @@ exports.main = async (event) => {
   }
 
   if (action === 'list') {
-    // 自动清理已过期的邀请码
-    const now = new Date()
-    await db.collection('invite_codes')
-      .where({
-        createdBy: OPENID,
-        expiresAt: db.command.lte(now)
-      })
-      .remove()
-
-    // 列出所有邀请码
+    // 列出所有邀请码（不自动清理，保留记录）
     const codes = await db.collection('invite_codes')
       .where({ createdBy: OPENID })
       .orderBy('createdAt', 'desc')
-      .limit(50)
+      .limit(100)
       .get()
 
     return { success: true, data: codes.data }
+  }
+
+  if (action === 'delete') {
+    if (!id) {
+      return { success: false, message: '缺少参数' }
+    }
+    await db.collection('invite_codes').doc(id).remove()
+    return { success: true, message: '已删除' }
   }
 
   return { success: false, message: '未知操作' }
