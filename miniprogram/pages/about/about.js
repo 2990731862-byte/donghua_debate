@@ -13,6 +13,10 @@ Page({
     ]
   },
 
+  onShow() {
+    wx.setNavigationBarTitle({ title: '关于' })
+  },
+
   goAdmin() {
     checkAdminStatus().then(result => {
       if (result.isAdmin) {
@@ -24,6 +28,8 @@ Page({
       }
     })
   },
+
+  stopPropagation() {},
 
   cancelCodeModal() {
     this.setData({ showCodeModal: false, inputCode: '', inputName: '' })

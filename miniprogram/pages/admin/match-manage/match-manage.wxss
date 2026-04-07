@@ -176,9 +176,15 @@
 }
 
 .p-name {
-  flex: 1;
   font-size: 26rpx;
   color: #333333;
+}
+
+.p-student-id {
+  font-size: 20rpx;
+  color: #999999;
+  margin-left: 8rpx;
+  flex-shrink: 0;
 }
 
 .p-badge {
@@ -233,7 +239,17 @@
 }
 
 .detail-name {
-  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.detail-student-id {
+  font-size: 22rpx;
+  color: #999999;
+  margin-left: 10rpx;
+}
+
+.detail-name {
   font-size: 30rpx;
   font-weight: 600;
   color: #1A1A2E;
@@ -358,7 +374,7 @@
 
 /* 为固定底部栏留出空间 */
 .container {
-  padding-bottom: 120rpx !important;
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom)) !important;
 }
 
 .switch-btn {

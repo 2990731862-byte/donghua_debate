@@ -6,16 +6,22 @@ exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
   const { action, data } = event
 
-  // 验证管理员权限
+  // 验证管理员权限（超级管理员永不过期，普通管理员需在有效期内）
+  const _ = db.command
+  const now = new Date()
   const adminResult = await db.collection('admins')
-    .where({ openid: OPENID })
+    .where(_.or([
+      { openid: OPENID, role: 'super_admin' },
+      { openid: OPENID, expiresAt: _.gt(now) },
+      { openid: OPENID, expiresAt: _.exists(false) }
+    ]))
     .get()
   if (adminResult.data.length === 0) {
-    return { success: false, message: '无权限' }
+    return { success: false, message: '无权限或权限已过期' }
   }
 
   if (action === 'create') {
-    const { name, college, grade } = data
+    const { name, college, grade, studentId } = data
     if (!name || !college) {
       return { success: false, message: '姓名和学院不能为空' }
     }
@@ -25,6 +31,7 @@ exports.main = async (event) => {
         name,
         college,
         grade: grade || '',
+        studentId: studentId || '',
         totalScore: 0,
         rank: 0,
         matchCount: 0,
@@ -42,13 +49,14 @@ exports.main = async (event) => {
   }
 
   if (action === 'update') {
-    const { id, name, college, grade } = data
+    const { id, name, college, grade, studentId } = data
     if (!id) return { success: false, message: '缺少辩手ID' }
 
     const updateData = { updatedAt: new Date() }
     if (name) updateData.name = name
     if (college) updateData.college = college
     if (grade !== undefined) updateData.grade = grade
+    if (studentId !== undefined) updateData.studentId = studentId
 
     await db.collection('debaters').doc(id).update({ data: updateData })
     return { success: true }
@@ -113,6 +121,53 @@ exports.main = async (event) => {
   if (action === 'count') {
     const result = await db.collection('debaters').count()
     return { success: true, count: result.total }
+  }
+
+  // ====== 学院管理 ======
+  async function ensureSettingsCollection() {
+    try {
+      await db.createCollection('settings')
+    } catch (e) {
+      // 集合已存在，忽略
+    }
+  }
+
+  if (action === 'listColleges') {
+    await ensureSettingsCollection()
+    const doc = await db.collection('settings').doc('colleges').get().catch(() => null)
+    return { success: true, data: (doc && doc.data) ? doc.data.names : [] }
+  }
+
+  if (action === 'addCollege') {
+    const { name } = data
+    if (!name || !name.trim()) return { success: false, message: '学院名称不能为空' }
+    const trimmed = name.trim()
+
+    await ensureSettingsCollection()
+    const doc = await db.collection('settings').doc('colleges').get().catch(() => null)
+    const names = (doc && doc.data) ? doc.data.names : []
+
+    if (names.includes(trimmed)) return { success: false, message: '该学院已存在' }
+
+    names.push(trimmed)
+    await db.collection('settings').doc('colleges').set({ data: { names } })
+    return { success: true }
+  }
+
+  if (action === 'deleteCollege') {
+    const { name } = data
+    if (!name) return { success: false, message: '缺少学院名称' }
+
+    await ensureSettingsCollection()
+    const doc = await db.collection('settings').doc('colleges').get().catch(() => null)
+    const names = (doc && doc.data) ? doc.data.names : []
+
+    const idx = names.indexOf(name)
+    if (idx === -1) return { success: false, message: '学院不存在' }
+
+    names.splice(idx, 1)
+    await db.collection('settings').doc('colleges').set({ data: { names } })
+    return { success: true }
   }
 
   return { success: false, message: '未知操作' }

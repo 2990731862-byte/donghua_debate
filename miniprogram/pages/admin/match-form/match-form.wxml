@@ -28,7 +28,22 @@
 
     <view class="form-group">
       <text class="form-label">比赛名称</text>
-      <input class="form-input" placeholder="如：第十届新生杯" value="{{matchName}}" bindinput="onMatchNameInput" />
+      <view class="name-input-wrap">
+        <input class="form-input" placeholder="年份+赛事（例如2026镜月杯）" value="{{matchName}}" bindinput="onMatchNameInput" bindfocus="onMatchNameFocus" bindblur="onMatchNameBlur" />
+        <view class="name-suggestions" wx:if="{{showNameSuggestions}}" catchtouchmove="preventTouchMove">
+          <scroll-view scroll-y class="name-suggestion-scroll" enhanced show-scrollbar="{{false}}">
+            <view
+              class="name-suggestion-item"
+              wx:for="{{matchNameSuggestions}}"
+              wx:key="*this"
+              catchtap="selectMatchName"
+              data-name="{{item}}"
+            >
+              <text>{{item}}</text>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
     </view>
 
     <view class="form-group">
@@ -112,27 +127,59 @@
   </view>
 
   <!-- 步骤2：选择参赛者 -->
-  <view class="step-content card" wx:if="{{step === 2}}">
+  <view class="step-content" wx:if="{{step === 2}}">
     <text class="step-title">选择参赛辩手</text>
-    <text class="step-hint">点击选择参加本场比赛的辩手</text>
 
-    <view class="debater-select-list">
-      <view
-        class="debater-select-item {{item.selected ? 'selected' : ''}}"
-        wx:for="{{allDebaters}}"
-        wx:key="_id"
-        bindtap="toggleDebater"
-        data-index="{{index}}"
-      >
-        <view class="select-check">{{item.selected ? '✓' : ''}}</view>
-        <text class="select-name">{{item.name}}</text>
-        <text class="select-college">{{item.college}}</text>
+    <!-- 搜索栏 -->
+    <view class="search-bar-wrap">
+      <view class="search-bar-inner">
+        <text class="search-icon-text">🔍</text>
+        <input class="search-input-box" placeholder="搜索辩手姓名或学院" value="{{searchKeyword}}" bindinput="onSearchInput" />
+        <text class="search-clear-btn" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
       </view>
     </view>
 
-    <view class="selected-count">已选 {{selectedCount}} 人</view>
+    <!-- 已选计数 -->
+    <view class="selected-count-bar" wx:if="{{selectedCount > 0}}">
+      <text>已选 {{selectedCount}} 人</text>
+    </view>
 
-    <view class="step-buttons">
+    <!-- 辩手列表（分组滚动） -->
+    <scroll-view scroll-y class="debater-scroll-view" enhanced show-scrollbar="{{false}}">
+      <view wx:for="{{groupedDebaters}}" wx:key="letter">
+        <view class="letter-section-title" id="letter-{{item.letter}}">{{item.letter}}</view>
+        <view
+          class="debater-select-item {{debater.selected ? 'selected' : ''}}"
+          wx:for="{{item.items}}"
+          wx:for-item="debater"
+          wx:key="_id"
+          bindtap="toggleDebater"
+          data-id="{{debater._id}}"
+        >
+          <view class="select-check">{{debater.selected ? '✓' : ''}}</view>
+          <text class="select-name">{{debater.name}}</text>
+          <text class="select-student-id" wx:if="{{debater.studentId}}">{{debater.studentId}}</text>
+          <text class="select-college">{{debater.college}}</text>
+        </view>
+      </view>
+      <view class="empty-search" wx:if="{{filteredDebaters.length === 0 && searchKeyword}}">
+        <text>未找到匹配的辩手</text>
+      </view>
+      <view style="height: 40rpx;"></view>
+    </scroll-view>
+
+    <!-- 字母索引 -->
+    <view class="letter-sidebar" wx:if="{{groupedDebaters.length > 0 && !searchKeyword}}">
+      <text
+        class="letter-sidebar-item {{item === groupedDebaters[0].letter ? 'active' : ''}}"
+        wx:for="{{letters}}"
+        wx:key="*this"
+        bindtap="onLetterTap"
+        data-letter="{{item}}"
+      >{{item}}</text>
+    </view>
+
+    <view class="step-buttons" style="margin-top: 16rpx;">
       <view class="btn-secondary" bindtap="prevStep">上一步</view>
       <view class="btn-primary" bindtap="nextStep">下一步</view>
     </view>
@@ -143,7 +190,10 @@
     <text class="step-title" style="margin-bottom: 16rpx;">参赛者详情</text>
 
     <view class="participant-card card" wx:for="{{participants}}" wx:key="debaterId">
-      <text class="participant-name">{{item.debaterName}}</text>
+      <view class="participant-name-row">
+        <text class="participant-name">{{item.debaterName}}</text>
+        <text class="participant-student-id" wx:if="{{item.studentId}}">{{item.studentId}}</text>
+      </view>
 
       <view class="form-group">
         <view class="checkbox-row" bindtap="toggleBestDebater" data-pindex="{{index}}">
@@ -204,7 +254,10 @@
     <view class="confirm-participants">
       <text class="form-label">参赛者详情</text>
       <view class="confirm-participant" wx:for="{{participants}}" wx:key="debaterId">
-        <text class="cp-name">{{item.debaterName}}</text>
+        <view class="cp-name-row">
+          <text class="cp-name">{{item.debaterName}}</text>
+          <text class="cp-student-id" wx:if="{{item.studentId}}">{{item.studentId}}</text>
+        </view>
         <text class="cp-detail" wx:if="{{item.isBestDebater}}">佳辩</text>
         <text class="cp-detail cp-top3" wx:if="{{item.topThreeFinish}}">🏆 前三名</text>
       </view>

@@ -154,9 +154,91 @@
 }
 
 /* 辩手选择列表 */
-.debater-select-list {
-  max-height: 600rpx;
-  overflow-y: scroll;
+.debater-scroll-view {
+  height: calc(100vh - 520rpx);
+  min-height: 400rpx;
+  max-height: 700rpx;
+}
+
+.search-bar-wrap {
+  margin-bottom: 12rpx;
+}
+
+.search-bar-inner {
+  display: flex;
+  align-items: center;
+  background: #F6F6F6;
+  border-radius: 12rpx;
+  padding: 12rpx 16rpx;
+}
+
+.search-icon-text {
+  font-size: 28rpx;
+  margin-right: 10rpx;
+}
+
+.search-input-box {
+  flex: 1;
+  font-size: 26rpx;
+}
+
+.search-clear-btn {
+  font-size: 28rpx;
+  color: #999;
+  padding: 4rpx 8rpx;
+}
+
+.selected-count-bar {
+  text-align: center;
+  font-size: 24rpx;
+  color: #1A1A2E;
+  font-weight: 600;
+  padding: 8rpx 0 12rpx;
+}
+
+.letter-section-title {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #F0F0F0;
+  font-size: 22rpx;
+  color: #999;
+  padding: 10rpx 16rpx;
+  font-weight: 600;
+}
+
+.empty-search {
+  text-align: center;
+  color: #999;
+  font-size: 26rpx;
+  padding: 60rpx 0;
+}
+
+/* 字母索引侧栏 */
+.letter-sidebar {
+  position: fixed;
+  right: 6rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.letter-sidebar-item {
+  font-size: 18rpx;
+  color: #999;
+  width: 32rpx;
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.letter-sidebar-item.active {
+  color: #1A1A2E;
+  font-weight: 700;
 }
 
 .debater-select-item {
@@ -194,7 +276,13 @@
   font-size: 28rpx;
   font-weight: 500;
   color: #333333;
-  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.select-student-id {
+  font-size: 20rpx;
+  color: #999999;
+  flex-shrink: 0;
 }
 
 .select-college {
@@ -216,11 +304,20 @@
 }
 
 .participant-name {
-  display: block;
   font-size: 30rpx;
   font-weight: 600;
-  color: #1A1A2E;
-  margin-bottom: 16rpx;
+  color: #333333;
+}
+
+.participant-name-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.participant-student-id {
+  font-size: 22rpx;
+  color: #999999;
+  margin-left: 12rpx;
 }
 
 /* Checkbox */
@@ -252,6 +349,43 @@
 .checkbox-label {
   font-size: 26rpx;
   color: #333333;
+}
+
+/* 比赛名称输入 + 自动补全 */
+.name-input-wrap {
+  position: relative;
+}
+
+.name-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 0 0 12rpx 12rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  overflow: hidden;
+}
+
+.name-suggestion-scroll {
+  max-height: 400rpx;
+}
+
+.name-suggestion-item {
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  color: #333333;
+  border-bottom: 1rpx solid #F5F5F5;
+  transition: background 0.15s;
+}
+
+.name-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.name-suggestion-item:active {
+  background: #F0F5FF;
 }
 
 /* 确认页 */
@@ -287,10 +421,20 @@
 }
 
 .cp-name {
-  display: block;
   font-size: 26rpx;
   font-weight: 600;
   color: #333333;
+}
+
+.cp-name-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.cp-student-id {
+  font-size: 20rpx;
+  color: #999999;
+  margin-left: 12rpx;
 }
 
 .cp-detail {

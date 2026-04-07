@@ -24,7 +24,7 @@
 }
 
 .leaderboard-list {
-  padding-bottom: 20rpx;
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
 .load-more {

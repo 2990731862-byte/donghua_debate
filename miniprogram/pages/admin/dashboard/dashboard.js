@@ -37,6 +37,8 @@ Page({
   loadRole() {
     checkAdminStatus().then(result => {
       this.setData({ role: result.role })
+    }).catch(err => {
+      console.error('获取角色失败', err)
     })
   },
 
@@ -48,6 +50,8 @@ Page({
       if (res.result.success) {
         this.setData({ 'stats.debaterCount': res.result.count })
       }
+    }).catch(err => {
+      console.error('获取辩手数量失败', err)
     })
 
     wx.cloud.callFunction({
@@ -57,6 +61,8 @@ Page({
       if (res.result.success) {
         this.setData({ 'stats.matchCount': res.result.count })
       }
+    }).catch(err => {
+      console.error('获取比赛数量失败', err)
     })
   },
 

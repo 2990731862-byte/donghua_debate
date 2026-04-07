@@ -80,7 +80,7 @@
 
   <!-- 邀请码弹窗 -->
   <view class="modal-mask" wx:if="{{showCodeModal}}" bindtap="cancelCodeModal">
-    <view class="modal-dialog" catchtap="">
+    <view class="modal-dialog" catchtap="stopPropagation">
       <view class="modal-title">管理员入口</view>
       <view class="modal-body">请输入邀请码和你的姓名以获取管理权限（有效期7天）</view>
       <input class="modal-input" placeholder="输入邀请码" placeholder-class="modal-placeholder" value="{{inputCode}}" bindinput="onCodeInput" maxlength="10" />

@@ -8,6 +8,12 @@ function floorToHalf(value) {
   return Math.floor(value * 2) / 2
 }
 
+/**
+ * 破纪录机制（按时间顺序、按级别独立计算）：
+ * - 轮次破纪录：同级别赛事中，首次达到某轮次
+ * - 佳辩破纪录：同级别赛事中，首次获得佳辩（不限轮次）
+ * - 前三破纪录：同级别赛事中，首次获得前三
+ */
 function calculateParticipantScore(participant, W, personalRecords) {
   const { roundsParticipated, bestDebaterRounds, topThreeFinish } = participant
   const rounds = [...roundsParticipated].sort((a, b) => a - b)
@@ -39,9 +45,9 @@ function calculateParticipantScore(participant, W, personalRecords) {
     if (isBestDebater && isRecordBreakingBestDebater) recordBonus += 0.5 * W
     if (isTopThree && isRecordBreakingTopThree) recordBonus += 0.5 * W
 
-    if (isRecordBreakingRound) currentMaxRound = roundNum
-    if (isBestDebater && !hadBestDebater) hadBestDebater = true
-    if (isTopThree && !hadTopThree) hadTopThree = true
+    if (roundNum > currentMaxRound) currentMaxRound = roundNum
+    if (isBestDebater) hadBestDebater = true
+    if (isTopThree) hadTopThree = true
 
     totalScore += baseReward + recordBonus
     roundDetails.push({
@@ -65,13 +71,20 @@ function calculateParticipantScore(participant, W, personalRecords) {
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
 
-  // 验证权限：内部调用（如 manageMatch 删除后自动触发）跳过验证
-  if (!event.internal) {
+  // 验证权限：内部调用（云函数间调用，OPENID 为空）跳过验证
+  const WX_CONTEXT = cloud.getWXContext()
+  const isInternalCall = !WX_CONTEXT.FROM_OPENID || WX_CONTEXT.FROM_OPENID === ''
+  if (!isInternalCall) {
+    const _ = db.command
+    const now = new Date()
     const adminResult = await db.collection('admins')
-      .where({ openid: OPENID })
+      .where(_.or([
+        { openid: OPENID, role: 'super_admin' },
+        { openid: OPENID, expiresAt: _.gt(now) }
+      ]))
       .get()
     if (adminResult.data.length === 0) {
-      return { success: false, message: '无权限' }
+      return { success: false, message: '无权限或权限已过期' }
     }
   }
 
@@ -91,9 +104,10 @@ exports.main = async (event) => {
     }
   }
 
-  // 按日期顺序获取所有比赛
+  // 按日期顺序获取所有比赛（同日期按创建时间排序）
   const allMatches = await db.collection('matches')
     .orderBy('date', 'asc')
+    .orderBy('createdAt', 'asc')
     .limit(100)
     .get()
 
@@ -129,7 +143,6 @@ exports.main = async (event) => {
   }
 
   // 更新所有辩手的积分和排名
-  // 先按积分排序
   const sortedIds = Object.keys(debaterMap).sort(
     (a, b) => debaterMap[b].totalScore - debaterMap[a].totalScore
   )

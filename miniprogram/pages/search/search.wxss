@@ -35,6 +35,15 @@
   margin-bottom: 16rpx;
 }
 
+.search-results {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+
+.recent-section {
+  margin-top: 16rpx;
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -82,10 +91,6 @@
   font-size: 24rpx;
   color: #999999;
   margin-top: 8rpx;
-}
-
-.recent-section {
-  margin-top: 16rpx;
 }
 
 .recent-header {

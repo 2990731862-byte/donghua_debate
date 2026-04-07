@@ -1,7 +1,3 @@
-.add-btn {
-  margin-bottom: 24rpx;
-}
-
 .debater-item {
   display: flex;
   align-items: center;
@@ -14,10 +10,20 @@
 }
 
 .debater-name {
-  display: block;
   font-size: 30rpx;
   font-weight: 600;
   color: #333333;
+}
+
+.debater-name-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.debater-student-id {
+  font-size: 22rpx;
+  color: #999999;
+  margin-left: 12rpx;
 }
 
 .debater-meta {
@@ -126,6 +132,10 @@
   padding: 80rpx;
 }
 
+.debater-list {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 .empty-icon {
   font-size: 60rpx;
   margin-bottom: 16rpx;
@@ -135,3 +145,76 @@
   font-size: 26rpx;
   color: #999999;
 }
+
+/* 顶部按钮栏 */
+.top-btns {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.add-btn {
+  flex: 1;
+}
+
+.college-btn {
+  padding: 20rpx 28rpx;
+}
+
+/* Picker */
+.picker-input {
+  display: flex;
+  align-items: center;
+}
+
+/* 学院管理弹窗 */
+.college-add-row {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.college-add-input {
+  flex: 1;
+}
+
+.college-add-btn {
+  padding: 16rpx 28rpx;
+  font-size: 26rpx;
+  white-space: nowrap;
+}
+
+.college-list-scroll {
+  max-height: 500rpx;
+}
+
+.college-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.college-item:last-child {
+  border-bottom: none;
+}
+
+.college-name {
+  font-size: 28rpx;
+  color: #333333;
+  flex: 1;
+}
+
+.college-del {
+  font-size: 24rpx;
+  color: #F5222D;
+  padding: 8rpx 16rpx;
+}
+
+.college-empty {
+  padding: 60rpx 0;
+  text-align: center;
+}
+
+

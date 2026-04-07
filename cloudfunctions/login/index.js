@@ -11,7 +11,8 @@ exports.main = async (event, context) => {
   const adminResult = await db.collection('admins')
     .where(_.or([
       { openid: OPENID, role: 'super_admin' },
-      { openid: OPENID, expiresAt: _.gt(now) }
+      { openid: OPENID, expiresAt: _.gt(now) },
+      { openid: OPENID, expiresAt: _.exists(false) }
     ]))
     .get()
 

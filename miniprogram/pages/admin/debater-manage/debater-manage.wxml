@@ -1,14 +1,22 @@
 <view class="container">
-  <!-- 添加按钮 -->
-  <view class="add-btn btn-primary" bindtap="showAddForm">
-    + 添加辩手
+  <!-- 顶部按钮栏 -->
+  <view class="top-btns">
+    <view class="add-btn btn-primary" bindtap="showAddForm">
+      + 添加辩手
+    </view>
+    <view class="college-btn btn-secondary" bindtap="showCollegeModal">
+      学院管理
+    </view>
   </view>
 
   <!-- 辩手列表 -->
   <view class="debater-list">
     <view class="debater-item card stagger-item" wx:for="{{debaters}}" wx:key="_id" style="animation-delay: {{index * 0.05}}s">
       <view class="debater-info">
-        <text class="debater-name">{{item.name}}</text>
+        <view class="debater-name-row">
+          <text class="debater-name">{{item.name}}</text>
+          <text class="debater-student-id" wx:if="{{item.studentId}}">{{item.studentId}}</text>
+        </view>
         <text class="debater-meta">{{item.college}} · {{item.grade}}级 · {{item.totalScore}}分</text>
       </view>
       <view class="debater-actions">
@@ -39,18 +47,59 @@
       </view>
 
       <view class="form-group">
+        <text class="form-label">学号</text>
+        <input class="form-input" placeholder="请填写正确的9位学号" value="{{formStudentId}}" bindinput="onStudentIdInput" type="number" maxlength="9" />
+      </view>
+
+      <view class="form-group">
         <text class="form-label">学院</text>
-        <input class="form-input" placeholder="请输入学院" value="{{formCollege}}" bindinput="onCollegeInput" />
+        <picker mode="selector" range="{{collegePickerRange}}" value="{{collegePickerIndex}}" bindchange="onCollegePickerChange">
+          <view class="form-input picker-input">
+            <text>{{formCollege || '请选择学院'}}</text>
+          </view>
+        </picker>
       </view>
 
       <view class="form-group">
         <text class="form-label">年级</text>
-        <input class="form-input" placeholder="如：2024" value="{{formGrade}}" bindinput="onGradeInput" type="number" />
+        <picker mode="selector" range="{{gradePickerRange}}" value="{{gradePickerIndex}}" bindchange="onGradePickerChange">
+          <view class="form-input picker-input">
+            <text>{{formGrade || '请选择年级'}}</text>
+          </view>
+        </picker>
       </view>
 
       <view class="form-buttons">
         <view class="btn-secondary" bindtap="hideForm">取消</view>
         <view class="btn-primary" bindtap="submitForm">{{editingId ? '保存' : '添加'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学院管理弹窗 -->
+  <view class="modal-mask" wx:if="{{showCollegeModal}}" bindtap="hideCollegeModal" catchtouchmove="preventTouchMove">
+    <view class="modal-content card" catchtap="doNothing">
+      <text class="modal-title">学院管理</text>
+
+      <!-- 添加学院 -->
+      <view class="college-add-row">
+        <input class="form-input college-add-input" placeholder="输入学院/辩论队名称" value="{{newCollegeName}}" bindinput="onNewCollegeInput" bindconfirm="addCollege" />
+        <view class="btn-primary college-add-btn" bindtap="addCollege">添加</view>
+      </view>
+
+      <!-- 学院列表 -->
+      <scroll-view scroll-y class="college-list-scroll" enhanced show-scrollbar="{{false}}">
+        <view class="college-item" wx:for="{{colleges}}" wx:key="*this">
+          <text class="college-name">{{item}}</text>
+          <text class="college-del" catchtap="deleteCollege" data-name="{{item}}">删除</text>
+        </view>
+        <view class="college-empty" wx:if="{{colleges.length === 0}}">
+          <text class="empty-text">暂未设置学院，请先添加</text>
+        </view>
+      </scroll-view>
+
+      <view class="form-buttons">
+        <view class="btn-secondary" bindtap="hideCollegeModal">关闭</view>
       </view>
     </view>
   </view>

@@ -69,5 +69,9 @@ Page({
   clearHistory() {
     this.setData({ recentSearches: [] })
     wx.removeStorageSync(RECENT_KEY)
+  },
+
+  onShow() {
+    wx.setNavigationBarTitle({ title: '搜索辩手' })
   }
 })

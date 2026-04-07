@@ -150,6 +150,7 @@ Page({
           matchId: m._id,
           debaterId: p.debaterId,
           debaterName: p.debaterName,
+          studentId: p.studentId || '',
           matchName: m.name,
           matchLevel: m.level,
           matchStage: m.stage || '',

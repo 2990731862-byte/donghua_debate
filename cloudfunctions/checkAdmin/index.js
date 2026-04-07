@@ -19,9 +19,6 @@ exports.main = async (event) => {
     const existing = await db.collection('admins')
       .where({ openid: OPENID })
       .get()
-    if (existing.data.length > 0) {
-      return { success: true, message: '您已经是管理员', role: existing.data[0].role }
-    }
 
     // 查找有效的邀请码
     const _ = db.command
@@ -34,6 +31,9 @@ exports.main = async (event) => {
       .get()
 
     if (codeResult.data.length === 0) {
+      if (existing.data.length > 0) {
+        return { success: true, message: '您已经是管理员', role: existing.data[0].role }
+      }
       return { success: false, message: '邀请码无效或已过期' }
     }
 
@@ -49,10 +49,23 @@ exports.main = async (event) => {
       }
     })
 
-    // 添加为管理员（7天有效期）
+    // 更新有效期（7天）
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7)
 
+    if (existing.data.length > 0) {
+      // 已是管理员，续期
+      await db.collection('admins').doc(existing.data[0]._id).update({
+        data: {
+          expiresAt,
+          lastInvitedBy: codeDoc.createdBy,
+          updatedAt: new Date()
+        }
+      })
+      return { success: true, message: '授权已续期7天', role: existing.data[0].role, expiresAt }
+    }
+
+    // 新管理员，添加记录（7天有效期）
     await db.collection('admins').add({
       data: {
         openid: OPENID,
@@ -72,7 +85,8 @@ exports.main = async (event) => {
   const adminResult = await db.collection('admins')
     .where(_.or([
       { openid: OPENID, role: 'super_admin' },
-      { openid: OPENID, expiresAt: _.gt(now) }
+      { openid: OPENID, expiresAt: _.gt(now) },
+      { openid: OPENID, expiresAt: _.exists(false) }
     ]))
     .get()
 

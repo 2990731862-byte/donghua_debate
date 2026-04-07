@@ -37,6 +37,9 @@ Page({
         })
         this.setData({ codes, authorized: true })
       }
+    }).catch(err => {
+      console.error('加载邀请码失败', err)
+      wx.showToast({ title: '加载失败', icon: 'none' })
     })
   },
 

@@ -28,6 +28,7 @@
           </view>
           <view class="participant-row" wx:for="{{m.participants}}" wx:for-item="p" wx:key="debaterId">
             <text class="p-name">{{p.debaterName}}</text>
+            <text class="p-student-id" wx:if="{{p.studentId}}">{{p.studentId}}</text>
             <text class="p-badge p-best" wx:if="{{p._isBest}}">佳辩</text>
             <text class="p-badge p-top3" wx:if="{{p.topThreeFinish}}">前三</text>
             <text class="p-score">+{{p.scoreBreakdown.matchTotal}}</text>
@@ -47,6 +48,7 @@
     <view class="detail-card card" wx:for="{{detailRecords}}" wx:key="matchId+debaterId">
       <view class="detail-main" bindtap="toggleDetail" data-idx="{{index}}">
         <text class="detail-name">{{item.debaterName}}</text>
+        <text class="detail-student-id" wx:if="{{item.studentId}}">{{item.studentId}}</text>
         <text class="detail-match">{{item.matchName}}</text>
         <view class="detail-tags">
           <text class="tag tag-level-{{item.matchLevel === '院赛' ? 'college' : item.matchLevel === '校赛' ? 'university' : 'city'}}">{{item.matchLevel}}</text>

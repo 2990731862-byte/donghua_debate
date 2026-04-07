@@ -14,6 +14,14 @@ Page({
     this.loadLeaderboard()
   },
 
+  onShow() {
+    wx.setNavigationBarTitle({ title: '辩手积分榜' })
+    // 每次显示时刷新数据（录入比赛后切回排行榜需看到最新数据）
+    this._requestId++
+    this.setData({ page: 0, debaters: [], loading: true })
+    this.loadLeaderboard()
+  },
+
   onPullDownRefresh() {
     this._requestId++
     this.setData({ page: 0, debaters: [], loading: true })

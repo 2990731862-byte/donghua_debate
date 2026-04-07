@@ -146,6 +146,7 @@
 .footer {
   text-align: center;
   padding: 40rpx 0;
+  margin-bottom: calc(100rpx + env(safe-area-inset-bottom));
 }
 
 .footer-text {

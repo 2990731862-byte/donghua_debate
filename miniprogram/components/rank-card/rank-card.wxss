@@ -46,7 +46,17 @@
   font-size: 30rpx;
   font-weight: 600;
   color: #333333;
-  display: block;
+}
+
+.debater-name-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.debater-student-id {
+  font-size: 22rpx;
+  color: #999999;
+  margin-left: 12rpx;
 }
 
 .debater-meta {

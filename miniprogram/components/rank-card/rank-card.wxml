@@ -17,7 +17,10 @@
 
   <!-- 辩手信息 -->
   <view class="debater-info">
-    <text class="debater-name">{{debater.name}}</text>
+    <view class="debater-name-row">
+      <text class="debater-name">{{debater.name}}</text>
+      <text class="debater-student-id" wx:if="{{debater.studentId}}">{{debater.studentId}}</text>
+    </view>
     <view class="debater-meta">
       <text class="debater-college">{{debater.college}}</text>
       <text class="debater-matches">{{debater.matchCount}}场比赛</text>

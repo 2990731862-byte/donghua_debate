@@ -7,12 +7,18 @@ exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
   const { action, data } = event
 
-  // 验证管理员权限
+  // 验证管理员权限（超级管理员永不过期，普通管理员需在有效期内）
+  const _ = db.command
+  const now = new Date()
   const adminResult = await db.collection('admins')
-    .where({ openid: OPENID })
+    .where(_.or([
+      { openid: OPENID, role: 'super_admin' },
+      { openid: OPENID, expiresAt: _.gt(now) },
+      { openid: OPENID, expiresAt: _.exists(false) }
+    ]))
     .get()
   if (adminResult.data.length === 0) {
-    return { success: false, message: '无权限' }
+    return { success: false, message: '无权限或权限已过期' }
   }
 
   if (action === 'list') {
@@ -80,20 +86,7 @@ exports.main = async (event) => {
     const pIndex = match.participants.findIndex(p => p.debaterId === debaterId)
     if (pIndex === -1) return { success: false, message: '未找到该参赛者' }
 
-    const participant = match.participants[pIndex]
-
-    try {
-      const debaterResult = await db.collection('debaters').doc(debaterId).get()
-      const debater = debaterResult.data
-      const scoreToDeduct = participant.scoreBreakdown ? participant.scoreBreakdown.matchTotal : 0
-      const newTotalScore = Math.max(0, (debater.totalScore || 0) - scoreToDeduct)
-      const newMatchCount = Math.max(0, (debater.matchCount || 0) - 1)
-
-      await db.collection('debaters').doc(debaterId).update({
-        data: { totalScore: newTotalScore, matchCount: newMatchCount }
-      })
-    } catch (e) { }
-
+    // 先移除参赛记录，再触发重算（重算会自动重算所有积分，确保一致性）
     match.participants.splice(pIndex, 1)
 
     if (match.participants.length === 0) {
