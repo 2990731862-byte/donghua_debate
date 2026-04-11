@@ -170,5 +170,13 @@ exports.main = async (event) => {
     return { success: true }
   }
 
+  // ====== 设置管理 ======
+  if (action === 'getSetting') {
+    const { key } = event.data || event
+    if (!key) return { success: false, message: '缺少key' }
+    const doc = await db.collection('settings').doc(key).get().catch(() => null)
+    return { success: true, data: (doc && doc.data) ? doc.data : null }
+  }
+
   return { success: false, message: '未知操作' }
 }

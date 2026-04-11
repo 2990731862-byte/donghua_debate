@@ -43,6 +43,41 @@
   margin-top: 6rpx;
 }
 
+/* 清空数据提示卡片 */
+.clear-info-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.clear-info-label {
+  font-size: 24rpx;
+  color: #999999;
+  flex: 1;
+}
+
+.clear-info-date {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.clear-info-date.overdue {
+  color: #E94560;
+}
+
+.clear-info-hint {
+  width: 100%;
+  font-size: 22rpx;
+  color: #E94560;
+  margin-top: 4rpx;
+}
+
 .action-card {
   display: flex;
   align-items: center;
@@ -80,4 +115,17 @@
 .action-arrow {
   font-size: 32rpx;
   color: #CCCCCC;
+}
+
+/* 危险操作样式 */
+.danger-card {
+  border-left: 6rpx solid #E94560;
+}
+
+.danger-title {
+  color: #E94560;
+}
+
+.danger-desc {
+  color: #E94560;
 }

@@ -4,12 +4,26 @@ const db = cloud.database()
 const _ = db.command
 
 exports.main = async (event) => {
-  const { levelFilter, offset = 0, limit = 20 } = event
+  const { levelFilter = '', monthFilter = '', offset = 0, limit = 20 } = event
 
-  if (!levelFilter) {
-    // 全部：直接按 totalScore 排序
+  // 计算月份筛选的日期范围
+  let dateRange = null
+  if (monthFilter) {
+    // monthFilter 格式: "2026-04"
+    const startDate = monthFilter + '-01'
+    const [year, month] = monthFilter.split('-').map(Number)
+    // 计算该月最后一天
+    const lastDay = new Date(year, month, 0).getDate()
+    const endDate = `${monthFilter}-${String(lastDay).padStart(2, '0')}`
+    dateRange = { startDate, endDate }
+  }
+
+  if (!levelFilter && !monthFilter) {
+    // 全部（无筛选）：直接按 totalScore 排序，排除积分为0的
     const result = await db.collection('debaters')
+      .where({ totalScore: _.gt(0) })
       .orderBy('totalScore', 'desc')
+      .orderBy('matchCount', 'desc')
       .skip(offset)
       .limit(limit)
       .get()
@@ -20,21 +34,30 @@ exports.main = async (event) => {
     return { data }
   }
 
-  // 按赛级筛选：从 matches 中聚合该赛级的积分
-  // 分批获取所有该赛级的比赛（云数据库单次最多100条）
+  // 需要从 matches 中聚合的场景
+  let whereCondition = {}
+  if (levelFilter) {
+    whereCondition.level = levelFilter
+  }
+  if (dateRange) {
+    whereCondition.date = _.gte(dateRange.startDate).and(_.lte(dateRange.endDate))
+  }
+
+  // 分批获取符合条件的比赛
   const allMatches = []
   let lastMatchId = null
   let hasMore = true
   while (hasMore) {
-    let query = db.collection('matches')
-      .where({ level: levelFilter })
+    let condition = { ...whereCondition }
+    if (lastMatchId) {
+      condition._id = _.gt(lastMatchId)
+    }
+    const res = await db.collection('matches')
+      .where(condition)
       .field({ participants: true })
       .limit(100)
       .orderBy('_id', 'asc')
-    if (lastMatchId) {
-      query = query.where({ _id: _.gt(lastMatchId) })
-    }
-    const res = await query.get()
+      .get()
     allMatches.push(...res.data)
     if (res.data.length < 100) {
       hasMore = false
@@ -43,7 +66,7 @@ exports.main = async (event) => {
     }
   }
 
-  // 计算每个辩手在该赛级的累计得分
+  // 计算每个辩手的累计得分
   const scoreMap = {}
   const matchCountMap = {}
   for (const match of allMatches) {
@@ -55,36 +78,36 @@ exports.main = async (event) => {
     }
   }
 
-  if (Object.keys(scoreMap).length === 0) {
+  // 过滤掉积分为0的
+  const filteredIds = Object.keys(scoreMap).filter(id => scoreMap[id] > 0)
+
+  if (filteredIds.length === 0) {
     return { data: [] }
   }
 
-  // 查询这些辩手的详细信息
-  const debaterIds = Object.keys(scoreMap)
-  // 云数据库 where in 限制100条，分批查询
+  // 查询辩手详细信息
   const allDebaters = []
-  for (let i = 0; i < debaterIds.length; i += 100) {
-    const batch = debaterIds.slice(i, i + 100)
+  for (let i = 0; i < filteredIds.length; i += 100) {
+    const batch = filteredIds.slice(i, i + 100)
     const result = await db.collection('debaters')
       .where({ _id: _.in(batch) })
       .get()
     allDebaters.push(...result.data)
   }
 
-  // 替换为赛级专属积分和比赛数
+  // 替换为筛选后的积分
   const enriched = allDebaters.map(d => ({
     ...d,
     totalScore: scoreMap[d._id] || 0,
     matchCount: matchCountMap[d._id] || 0
   }))
 
-  // 按赛级积分排序
-  enriched.sort((a, b) => b.totalScore - a.totalScore)
+  // 按积分排序（同分按比赛场数降序）
+  enriched.sort((a, b) => b.totalScore - a.totalScore || b.matchCount - a.matchCount)
 
   // 分页
   const paged = enriched.slice(offset, offset + limit)
 
-  // 设置排名
   const result = paged.map((d, i) => ({
     ...d,
     rank: offset + i + 1

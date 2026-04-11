@@ -88,31 +88,69 @@ exports.main = async (event) => {
     }
   }
 
-  // 获取所有辩手，重置积分
-  const allDebaters = await db.collection('debaters').limit(100).get()
+  // 获取所有辩手，重置积分（游标分页，防超100）
+  const _ = db.command
   const debaterMap = {}
-
-  for (const d of allDebaters.data) {
-    debaterMap[d._id] = {
-      totalScore: 0,
-      matchCount: 0,
-      personalRecords: {
-        '院赛': { maxRound: 0, bestDebater: false, topThree: false },
-        '校赛': { maxRound: 0, bestDebater: false, topThree: false },
-        '市赛': { maxRound: 0, bestDebater: false, topThree: false }
+  let lastDebaterId = null
+  let hasMoreDebaters = true
+  while (hasMoreDebaters) {
+    let condition = {}
+    if (lastDebaterId) condition._id = _.gt(lastDebaterId)
+    const batch = await db.collection('debaters')
+      .where(condition)
+      .limit(100)
+      .orderBy('_id', 'asc')
+      .get()
+    if (batch.data.length === 0) {
+      hasMoreDebaters = false
+      break
+    }
+    for (const d of batch.data) {
+      debaterMap[d._id] = {
+        totalScore: 0,
+        matchCount: 0,
+        personalRecords: {
+          '院赛': { maxRound: 0, bestDebater: false, topThree: false },
+          '校赛': { maxRound: 0, bestDebater: false, topThree: false },
+          '市赛': { maxRound: 0, bestDebater: false, topThree: false }
+        }
       }
     }
+    lastDebaterId = batch.data[batch.data.length - 1]._id
+    if (batch.data.length < 100) hasMoreDebaters = false
   }
 
-  // 按日期顺序获取所有比赛（同日期按创建时间排序）
-  const allMatches = await db.collection('matches')
-    .orderBy('date', 'asc')
-    .orderBy('createdAt', 'asc')
-    .limit(100)
-    .get()
+  // 按日期顺序获取所有比赛（同日期按创建时间排序，游标分页）
+  // 注意：用 date+createdAt 复合排序，用 _id 游标分页（_id 本身按时间递增）
+  const allMatches = []
+  let lastMatchId = null
+  let hasMoreMatches = true
+  while (hasMoreMatches) {
+    let condition = {}
+    if (lastMatchId) condition._id = _.gt(lastMatchId)
+    const batch = await db.collection('matches')
+      .where(condition)
+      .orderBy('_id', 'asc')
+      .limit(100)
+      .get()
+    if (batch.data.length === 0) {
+      hasMoreMatches = false
+      break
+    }
+    allMatches.push(...batch.data)
+    lastMatchId = batch.data[batch.data.length - 1]._id
+    if (batch.data.length < 100) hasMoreMatches = false
+  }
+  // 按 date + createdAt 排序（确保破纪录机制按时间顺序计算）
+  allMatches.sort((a, b) => {
+    if (a.date !== b.date) return a.date < b.date ? -1 : 1
+    const ta = new Date(a.createdAt).getTime() || 0
+    const tb = new Date(b.createdAt).getTime() || 0
+    return ta - tb
+  })
 
   // 逐场比赛重算
-  for (const match of allMatches.data) {
+  for (const match of allMatches) {
     const W = LEVEL_WEIGHTS[match.level] || 1
     const updatedParticipants = []
 
@@ -163,6 +201,6 @@ exports.main = async (event) => {
 
   return {
     success: true,
-    message: `重算完成，处理了 ${allMatches.data.length} 场比赛，${sortedIds.length} 位辩手`
+    message: `重算完成，处理了 ${allMatches.length} 场比赛，${sortedIds.length} 位辩手`
   }
 }

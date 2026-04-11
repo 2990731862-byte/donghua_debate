@@ -17,6 +17,13 @@
     </view>
   </view>
 
+  <!-- 清空数据提示 -->
+  <view class="clear-info-card fade-in" style="animation-delay: 0.12s" wx:if="{{nextClearDate}}">
+    <text class="clear-info-label">下次建议清空比赛数据</text>
+    <text class="clear-info-date {{isOverdue ? 'overdue' : ''}}">{{nextClearDate}}</text>
+    <text class="clear-info-hint" wx:if="{{isOverdue}}">已超过建议清空日期</text>
+  </view>
+
   <!-- 操作按钮 -->
   <view class="actions fade-in" style="animation-delay: 0.15s">
     <view class="action-card card" bindtap="goMatchForm">
@@ -60,6 +67,15 @@
       <view class="action-info">
         <text class="action-title">重算积分</text>
         <text class="action-desc">全量重新计算所有积分</text>
+      </view>
+      <text class="action-arrow">›</text>
+    </view>
+
+    <view class="action-card card danger-card" bindtap="clearMatchData">
+      <text class="action-icon">🗑️</text>
+      <view class="action-info">
+        <text class="action-title danger-title">清空比赛数据</text>
+        <text class="action-desc danger-desc">删除所有比赛记录并重置积分</text>
       </view>
       <text class="action-arrow">›</text>
     </view>

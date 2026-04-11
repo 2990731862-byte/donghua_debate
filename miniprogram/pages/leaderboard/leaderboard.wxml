@@ -1,19 +1,54 @@
 <view class="container">
-  <!-- 筛选栏 -->
-  <view class="filter-bar">
+  <!-- 第一行：时间维度 -->
+  <view class="filter-bar time-bar">
+    <view
+      class="filter-item {{timeFilter === '' ? 'active' : ''}}"
+      bindtap="onSelectAll"
+    >
+      <text>全部</text>
+    </view>
+    <view class="filter-item filter-month {{timeFilter !== '' ? 'active' : ''}}">
+      <view class="filter-month-body" bindtap="onMonthTap">
+        <text class="filter-month-text">{{timeDisplay}}</text>
+      </view>
+      <view class="filter-month-arrow-area" bindtap="toggleTimePicker">
+        <text class="filter-month-arrow">▾</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 月份选择面板 -->
+  <view class="month-picker" wx:if="{{showTimePicker}}">
+    <view class="month-picker-mask" bindtap="closeTimePicker"></view>
+    <view class="month-picker-panel">
+      <view class="month-picker-title">选择月份</view>
+      <scroll-view scroll-y class="month-picker-list">
+        <view
+          class="month-option {{timeFilter === item.value ? 'month-active' : ''}}"
+          wx:for="{{timeOptions}}"
+          wx:key="value"
+          bindtap="onPickMonth"
+          data-month="{{item.value}}"
+          data-label="{{item.label}}"
+        >
+          <view class="month-option-left">
+            <text class="month-option-label">{{item.label}}</text>
+            <text class="month-option-tag" wx:if="{{item.isCurrentMonth}}">当月</text>
+          </view>
+          <text class="month-option-check" wx:if="{{timeFilter === item.value}}">✓</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 第二行：赛事级别 -->
+  <view class="filter-bar level-bar">
     <view
       class="filter-item {{currentFilter === '全部' ? 'active' : ''}}"
       bindtap="onFilterChange"
       data-filter="全部"
     >
       <text>全部</text>
-    </view>
-    <view
-      class="filter-item {{currentFilter === '院赛' ? 'active' : ''}}"
-      bindtap="onFilterChange"
-      data-filter="院赛"
-    >
-      <text>院赛</text>
     </view>
     <view
       class="filter-item {{currentFilter === '校赛' ? 'active' : ''}}"
@@ -39,11 +74,6 @@
       debater="{{item}}"
       index="{{index}}"
     />
-  </view>
-
-  <!-- 加载更多 -->
-  <view class="load-more" wx:if="{{hasMore && !loading}}" bindtap="loadMore">
-    <text>加载更多</text>
   </view>
 
   <!-- 加载中 -->

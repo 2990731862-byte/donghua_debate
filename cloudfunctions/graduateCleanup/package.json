@@ -1,0 +1,9 @@
+{
+  "name": "graduateCleanup",
+  "version": "1.0.0",
+  "description": "毕业季清除：每年6月30日清除对应年级辩手的所有数据",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
